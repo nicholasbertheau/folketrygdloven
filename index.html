@@ -20,6 +20,23 @@
       --highlight-border: #ecc94b;
       --shadow: 0 1px 3px rgba(0,0,0,0.08);
       --shadow-lg: 0 4px 12px rgba(0,0,0,0.1);
+      --sidebar-bg: #ffffff;
+    }
+
+    [data-theme="dark"] {
+      --primary: #90cdf4;
+      --primary-light: #63b3ed;
+      --accent: #63b3ed;
+      --bg: #1a202c;
+      --card-bg: #2d3748;
+      --text: #e2e8f0;
+      --text-muted: #a0aec0;
+      --border: #4a5568;
+      --highlight: #744210;
+      --highlight-border: #d69e2e;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.4);
+      --sidebar-bg: #2d3748;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,6 +54,12 @@
       padding: 1.5rem 1rem;
       text-align: center;
       box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+
+    [data-theme="dark"] header {
+      background: #2d3748;
+      border-bottom: 1px solid var(--border);
     }
 
     header h1 {
@@ -67,7 +90,7 @@
       top: 0.5rem;
       max-height: calc(100vh - 1rem);
       overflow-y: auto;
-      background: var(--card-bg);
+      background: var(--sidebar-bg);
       border-radius: 12px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
@@ -110,13 +133,13 @@
     }
 
     .sidebar-chapter:hover {
-      background: #ebf4ff;
+      background: rgba(49, 130, 206, 0.1);
       border-left-color: var(--accent);
       color: var(--accent);
     }
 
     .sidebar-chapter.active {
-      background: #ebf4ff;
+      background: rgba(49, 130, 206, 0.1);
       border-left-color: var(--accent);
       color: var(--accent);
       font-weight: 600;
@@ -306,7 +329,7 @@
       margin-top: 0.75rem;
       font-size: 0.9rem;
       line-height: 1.7;
-      color: #2d3748;
+      color: var(--text);
     }
 
     .article-body.open { display: block; }
@@ -332,15 +355,6 @@
     }
 
     .article-body .legalArticleHeader { display: none; }
-
-    .article-body .changesToParent {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-style: italic;
-      border-top: 1px solid var(--border);
-      margin-top: 0.75rem;
-      padding-top: 0.5rem;
-    }
 
     .article-body ol.defaultList {
       margin: 0.4rem 0 0.4rem 1.5rem;
@@ -379,7 +393,8 @@
       color: var(--primary);
       margin: 1.5rem 0 0.5rem;
       padding: 0.5rem 0.75rem;
-      background: #ebf4ff;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
       border-radius: 8px;
     }
 
@@ -422,6 +437,108 @@
     footer a { color: var(--accent); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
+    /* Theme toggle */
+    .theme-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: white;
+      border-radius: 8px;
+      padding: 0.35rem 0.6rem;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+      transition: background 0.2s;
+    }
+
+    .theme-toggle:hover { background: rgba(255,255,255,0.25); }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 200;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .back-to-top:hover { transform: scale(1.1); }
+
+    /* Permalink button */
+    .permalink-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-left: 0.5rem;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .permalink-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .permalink-btn.copied {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* Change history toggle */
+    .changes-toggle {
+      display: inline-block;
+      font-size: 0.7rem;
+      color: var(--accent);
+      cursor: pointer;
+      margin-top: 0.5rem;
+      padding: 0.15rem 0.4rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: none;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .changes-toggle:hover { border-color: var(--accent); }
+
+    .article-body .changesToParent {
+      display: none;
+    }
+
+    .article-body .changesToParent.show {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-style: italic;
+      border-top: 1px solid var(--border);
+      margin-top: 0.75rem;
+      padding-top: 0.5rem;
+    }
+
     /* Mobile */
     @media (max-width: 800px) {
       .container { flex-direction: column; }
@@ -463,6 +580,7 @@
   <header>
     <h1>📜 Folketrygdloven</h1>
     <p>Søk i lov om folketrygd (LOV-1997-02-28-19)</p>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Bytt tema">🌙</button>
   </header>
 
   <div class="container">
@@ -497,6 +615,8 @@
     Oppdatert <span id="lastUpdated"></span>. 
     Denne siden er ikke en offisiell Lovdata-tjeneste.
   </footer>
+
+  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Tilbake til toppen">↑</button>
 
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script>
@@ -718,8 +838,16 @@
 
         html += `<div class="article-card${isHighlighted ? ' highlighted' : ''}" id="card-${para.id}">`;
         html += `<div class="article-chapter-label">${escHtml(para.partTitle || '')}</div>`;
+
+        // Extract §-ref for permalink
+        const refMatch = para.html.match(/data-name="([^"]+)"/);
+        const paraRef = refMatch ? refMatch[1] : '';
+        const permalinkBtn = paraRef
+          ? `<button class="permalink-btn" onclick="event.stopPropagation();copyPermalink('${paraRef}')" title="Kopier lenke">🔗</button>`
+          : '';
+
         html += `<div class="article-title" onclick="toggleArticle('${para.id}')">
-                   <span>${escHtml(para.title)}</span>
+                   <span>${escHtml(para.title)}${permalinkBtn}</span>
                    <span class="chevron ${openClass ? 'open' : ''}">▶</span>
                  </div>`;
         
@@ -728,7 +856,14 @@
         if (query) {
           bodyHtml = highlightText(bodyHtml, query);
         }
-        html += `<div class="article-body ${openClass}">${bodyHtml}</div>`;
+
+        // Add changes toggle if paragraph has changesToParent
+        let changesBtn = '';
+        if (bodyHtml.includes('changesToParent')) {
+          changesBtn = `<button class="changes-toggle" onclick="toggleChanges(this, '${para.id}')">Vis endringshistorikk</button>`;
+        }
+
+        html += `<div class="article-body ${openClass}">${bodyHtml}${changesBtn}</div>`;
         html += '</div>';
       }
 
@@ -834,13 +969,77 @@
       return d.innerHTML;
     }
 
+    // --- Dark mode ---
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+      document.querySelector('.theme-toggle').textContent = isDark ? '🌙' : '☀️';
+    }
+
+    function loadTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.querySelector('.theme-toggle').textContent = '☀️';
+      }
+    }
+
+    // --- Permalink ---
+    function copyPermalink(ref) {
+      const url = `${window.location.origin}${window.location.pathname}#${encodeURIComponent(ref)}`;
+      navigator.clipboard.writeText(url).then(() => {
+        const btns = document.querySelectorAll('.permalink-btn');
+        btns.forEach(b => {
+          if (b.onclick && b.onclick.toString().includes(ref)) {
+            b.classList.add('copied');
+            b.textContent = '✓';
+            setTimeout(() => { b.classList.remove('copied'); b.textContent = '🔗'; }, 1500);
+          }
+        });
+      });
+    }
+
+    function handleHashNavigation() {
+      const hash = decodeURIComponent(window.location.hash.slice(1));
+      if (hash && hash.startsWith('§')) {
+        const normalized = hash.replace(/\s/g, '');
+        if (paraByRef[normalized]) {
+          navigateToPara(normalized);
+        }
+      }
+    }
+
+    // --- Change history toggle ---
+    function toggleChanges(btn, paraId) {
+      const card = document.getElementById('card-' + paraId);
+      if (!card) return;
+      const changes = card.querySelectorAll('.changesToParent');
+      const showing = changes[0]?.classList.contains('show');
+      changes.forEach(el => el.classList.toggle('show', !showing));
+      btn.textContent = showing ? 'Vis endringshistorikk' : 'Skjul endringshistorikk';
+    }
+
+    // --- Back to top ---
+    function setupBackToTop() {
+      const btn = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', window.scrollY > 400);
+      });
+    }
+
     // Search on Enter
     document.addEventListener('DOMContentLoaded', () => {
+      loadTheme();
+      setupBackToTop();
       document.getElementById('searchInput').addEventListener('keydown', e => {
         if (e.key === 'Enter') performSearch();
       });
-      init();
+      init().then(() => handleHashNavigation());
     });
+
+    window.addEventListener('hashchange', handleHashNavigation);
   </script>
 </body>
 </html>
