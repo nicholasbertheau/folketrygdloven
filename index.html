@@ -365,6 +365,8 @@
     let fuse = null;
     let allParagraphs = [];
     let currentView = 'toc';
+    // Maps "§X-Y" -> paragraph object for internal navigation
+    let paraByRef = {};
 
     async function init() {
       document.getElementById('results').innerHTML = '<div class="loading"><div class="spinner"></div><br>Laster folketrygdloven…</div>';
@@ -398,6 +400,16 @@
           ignoreLocation: true,
           minMatchCharLength: 2
         });
+
+        // Build lookup map from data-name (§X-Y) -> paragraph
+        for (const para of allParagraphs) {
+          const nameMatch = para.html.match(/data-name="([^"]+)"/);
+          if (nameMatch) {
+            paraByRef[nameMatch[1]] = para;
+            // Also store without spaces: §1-1 and § 1-1
+            paraByRef[nameMatch[1].replace(/\s/g, '')] = para;
+          }
+        }
 
         document.getElementById('dataInfo').textContent = `${allParagraphs.length} paragrafer`;
         document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('nb-NO');
@@ -555,6 +567,79 @@
       }
 
       document.getElementById('results').innerHTML = html;
+      rewriteInternalLinks();
+    }
+
+    function rewriteInternalLinks() {
+      const FTRL_PREFIX = 'lov/1997-02-28-19';
+      document.querySelectorAll('#results a[href]').forEach(a => {
+        const href = a.getAttribute('href');
+        if (href.startsWith(FTRL_PREFIX)) {
+          // Extract §-reference: "lov/1997-02-28-19/§8-4" -> "§8-4"
+          const ref = href.slice(FTRL_PREFIX.length + 1); // remove prefix + /
+          if (ref && ref.startsWith('§')) {
+            const normalized = ref.replace(/\s/g, '');
+            if (paraByRef[normalized]) {
+              a.href = '#';
+              a.onclick = (e) => { e.preventDefault(); navigateToPara(normalized); };
+              a.title = `Gå til ${ref}`;
+              a.style.cursor = 'pointer';
+              return;
+            }
+          }
+          // Chapter link: "lov/1997-02-28-19/kap8" -> find chapter
+          if (ref && ref.startsWith('kap')) {
+            a.href = '#';
+            a.onclick = (e) => { e.preventDefault(); navigateToChapter(ref); };
+            a.title = `Gå til kapittel ${ref.replace('kap', '')}`;
+            a.style.cursor = 'pointer';
+            return;
+          }
+        }
+        // External links: open on lovdata.no
+        if (href && !href.startsWith('#') && !href.startsWith('http')) {
+          a.href = `https://lovdata.no/${href}`;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.title = 'Åpne på Lovdata';
+        }
+      });
+    }
+
+    function navigateToPara(ref) {
+      const para = paraByRef[ref];
+      if (!para) return;
+      // Show all paragraphs, then scroll to the right one
+      showAll();
+      setTimeout(() => {
+        const card = document.getElementById('card-' + para.id);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          card.classList.add('highlighted');
+          // Open the article
+          const body = card.querySelector('.article-body');
+          const chevron = card.querySelector('.chevron');
+          if (body && !body.classList.contains('open')) {
+            body.classList.add('open');
+            if (chevron) chevron.classList.add('open');
+          }
+        }
+      }, 100);
+    }
+
+    function navigateToChapter(kapRef) {
+      // kapRef is like "kap8", "kap20" etc.
+      const kapNum = kapRef.replace(/^kap/i, '').toLowerCase();
+      // Find matching chapter
+      for (const part of lawData.parts) {
+        for (const ch of part.chapters) {
+          const title = ch.title.toLowerCase();
+          if (title.includes(`kapittel ${kapNum}.`) || title.includes(`kapittel ${kapNum} `)) {
+            showChapter(ch.id);
+            return;
+          }
+        }
+      }
     }
 
     function toggleArticle(id) {
