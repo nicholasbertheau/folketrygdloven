@@ -572,8 +572,7 @@
     function buildSidebar() {
       let html = '';
       for (const part of lawData.parts) {
-        // Short part label: "Del I", "Del II" etc.
-        const partLabel = part.title.match(/^(Del\s+\S+)/)?.[1] || part.title;
+        const partLabel = part.title;
         html += `<div class="sidebar-part">${escHtml(partLabel)}</div>`;
         for (const ch of part.chapters) {
           // Extract chapter number: "Kapittel 8. Sykepenger" -> "Kap. 8"
