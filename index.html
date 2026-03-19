@@ -483,6 +483,59 @@
 
     .back-to-top:hover { transform: scale(1.1); }
 
+    /* Search suggestions dropdown */
+    .search-box {
+      position: relative;
+    }
+    .search-suggestions {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 320px;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .search-suggestions.open {
+      display: block;
+    }
+    .search-suggestions li {
+      padding: 0.5rem 0.8rem;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      transition: background 0.15s;
+    }
+    .search-suggestions li:last-child {
+      border-bottom: none;
+    }
+    .search-suggestions li:hover,
+    .search-suggestions li.active {
+      background: var(--accent);
+      color: white;
+    }
+    .search-suggestions li .suggestion-title {
+      font-weight: 600;
+    }
+    .search-suggestions li .suggestion-chapter {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-left: 0.5rem;
+    }
+    .search-suggestions li:hover .suggestion-chapter,
+    .search-suggestions li.active .suggestion-chapter {
+      color: rgba(255,255,255,0.8);
+    }
+
     /* Permalink button */
     .permalink-btn {
       background: none;
@@ -798,8 +851,9 @@
       </button>
       <div class="search-container">
         <div class="search-box">
-          <input type="text" id="searchInput" placeholder="Søk etter paragraf, kapittel eller stikkord…" autofocus>
+          <input type="text" id="searchInput" placeholder="Søk etter paragraf, kapittel eller stikkord…" autofocus autocomplete="off">
           <button onclick="performSearch()">Søk</button>
+          <ul id="searchSuggestions" class="search-suggestions"></ul>
         </div>
         <div class="search-meta">
           <span id="resultCount"></span>
@@ -1117,7 +1171,7 @@
         const refMatch = para.html.match(/data-name="([^"]+)"/);
         const paraRef = refMatch ? refMatch[1] : '';
         const permalinkBtn = paraRef
-          ? `<button class="permalink-btn" onclick="event.stopPropagation();copyPermalink('${paraRef}')" title="Kopier lenke">🔗</button>`
+          ? `<button class="permalink-btn" onclick="event.stopPropagation();copyPermalink('${paraRef}')" title="Kopier direktelenke til denne paragrafen">🔗</button>`
           : '';
 
         html += `<div class="article-title" onclick="toggleArticle('${para.id}')">
@@ -1432,8 +1486,86 @@
     document.addEventListener('DOMContentLoaded', () => {
       loadTheme();
       setupBackToTop();
-      document.getElementById('searchInput').addEventListener('keydown', e => {
+      const searchInput = document.getElementById('searchInput');
+      const suggestionsEl = document.getElementById('searchSuggestions');
+      let suggestIndex = -1;
+
+      function showSuggestions(query) {
+        suggestionsEl.innerHTML = '';
+        suggestIndex = -1;
+        if (!query || query.length < 2 || !fuse) {
+          suggestionsEl.classList.remove('open');
+          return;
+        }
+        const hits = fuse.search(query, { limit: 8 }).map(r => r.item);
+        if (hits.length === 0) {
+          suggestionsEl.classList.remove('open');
+          return;
+        }
+        hits.forEach((p, i) => {
+          const li = document.createElement('li');
+          const chapterInfo = findChapterForParagraph(p.id);
+          li.innerHTML = `<span class="suggestion-title">${escHtml(p.title)}</span>`
+            + (chapterInfo ? `<span class="suggestion-chapter">${escHtml(chapterInfo)}</span>` : '');
+          li.addEventListener('mousedown', e => {
+            e.preventDefault();
+            searchInput.value = p.title.replace(/\s*\(.*$/, '');
+            suggestionsEl.classList.remove('open');
+            performSearch();
+          });
+          suggestionsEl.appendChild(li);
+        });
+        suggestionsEl.classList.add('open');
+      }
+
+      function findChapterForParagraph(paraId) {
+        if (!lawData) return '';
+        for (const part of lawData.parts) {
+          for (const ch of part.chapters) {
+            if (ch.paragraphs.some(p => p.id === paraId)) {
+              return ch.title;
+            }
+          }
+        }
+        return '';
+      }
+
+      let suggestTimer = null;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(suggestTimer);
+        suggestTimer = setTimeout(() => showSuggestions(searchInput.value.trim()), 150);
+      });
+
+      searchInput.addEventListener('keydown', e => {
+        const items = suggestionsEl.querySelectorAll('li');
+        if (suggestionsEl.classList.contains('open') && items.length > 0) {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            suggestIndex = Math.min(suggestIndex + 1, items.length - 1);
+            items.forEach((li, i) => li.classList.toggle('active', i === suggestIndex));
+            return;
+          }
+          if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            suggestIndex = Math.max(suggestIndex - 1, -1);
+            items.forEach((li, i) => li.classList.toggle('active', i === suggestIndex));
+            return;
+          }
+          if (e.key === 'Enter' && suggestIndex >= 0) {
+            e.preventDefault();
+            items[suggestIndex].dispatchEvent(new Event('mousedown'));
+            return;
+          }
+          if (e.key === 'Escape') {
+            suggestionsEl.classList.remove('open');
+            return;
+          }
+        }
         if (e.key === 'Enter') performSearch();
+      });
+
+      searchInput.addEventListener('blur', () => {
+        setTimeout(() => suggestionsEl.classList.remove('open'), 200);
       });
       init().then(() => {
         handleHashNavigation();
