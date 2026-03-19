@@ -539,39 +539,6 @@
       padding-top: 0.5rem;
     }
 
-    /* Forskrifter badge */
-    .forskrift-badge {
-      display: inline-block;
-      font-size: 0.65rem;
-      background: rgba(49, 130, 206, 0.1);
-      color: var(--accent);
-      padding: 0.1rem 0.4rem;
-      border-radius: 4px;
-      margin: 0.15rem 0.1rem;
-      cursor: pointer;
-      text-decoration: none;
-      border: 1px solid transparent;
-      transition: all 0.15s;
-    }
-
-    .forskrift-badge:hover {
-      border-color: var(--accent);
-      background: rgba(49, 130, 206, 0.2);
-    }
-
-    .forskrift-section {
-      margin-top: 0.75rem;
-      padding-top: 0.5rem;
-      border-top: 1px dashed var(--border);
-    }
-
-    .forskrift-section-title {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 0.3rem;
-    }
-
     /* Changelog */
     .changelog-card {
       background: var(--card-bg);
@@ -627,11 +594,11 @@
     .clippy-container {
       position: fixed;
       bottom: 2rem;
-      left: 2rem;
+      right: 5rem;
       z-index: 300;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: flex-end;
       transition: opacity 0.3s;
     }
 
@@ -640,7 +607,7 @@
     .clippy-bubble {
       background: var(--card-bg);
       border: 2px solid var(--border);
-      border-radius: 12px 12px 12px 0;
+      border-radius: 12px 12px 0 12px;
       padding: 0.75rem 1rem;
       margin-bottom: 0.5rem;
       max-width: 260px;
@@ -656,11 +623,11 @@
       content: "";
       position: absolute;
       bottom: -8px;
-      left: 16px;
+      right: 16px;
       width: 0;
       height: 0;
-      border-left: 8px solid var(--border);
-      border-right: 8px solid transparent;
+      border-right: 8px solid var(--border);
+      border-left: 8px solid transparent;
       border-top: 8px solid var(--card-bg);
     }
 
@@ -735,7 +702,7 @@
     .clippy-restore {
       position: fixed;
       bottom: 2rem;
-      left: 2rem;
+      right: 5rem;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -768,11 +735,11 @@
     .clippy-eye:last-of-type { animation-delay: 0.1s; }
 
     @media (max-width: 800px) {
-      .clippy-container { bottom: 1rem; left: 1rem; }
+      .clippy-container { bottom: 1rem; right: 1rem; }
       .clippy-bubble { max-width: 200px; font-size: 0.75rem; }
       .clippy-character { width: 45px; height: 53px; }
       .clippy-body { width: 45px; height: 53px; }
-      .clippy-restore { bottom: 1rem; left: 1rem; }
+      .clippy-restore { bottom: 1rem; right: 1rem; }
     }
 
     /* Mobile */
@@ -889,10 +856,7 @@
     let allParagraphs = [];
     let currentView = 'toc';
     let paraByRef = {};
-    let forskrifterData = [];
     let changelogData = null;
-    // Maps §-ref -> list of forskrifter referencing it
-    let forskrifterByPara = {};
 
     async function init() {
       document.getElementById('results').innerHTML = '<div class="loading"><div class="spinner"></div><br>Laster folketrygdloven…</div>';
@@ -940,20 +904,6 @@
         document.getElementById('dataInfo').textContent = `${allParagraphs.length} paragrafer`;
         document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('nb-NO');
 
-        // Load forskrifter
-        try {
-          const fRes = await fetch('forskrifter.json');
-          forskrifterData = await fRes.json();
-          // Build lookup: §-ref -> forskrifter
-          for (const f of forskrifterData) {
-            for (const ref of f.ftrlRefs) {
-              const key = ref.replace(/\s/g, '');
-              if (!forskrifterByPara[key]) forskrifterByPara[key] = [];
-              forskrifterByPara[key].push(f);
-            }
-          }
-        } catch(e) { console.warn('Kunne ikke laste forskrifter:', e); }
-
         // Load changelog
         try {
           const cRes = await fetch('changelog.json');
@@ -973,7 +923,6 @@
       const container = document.getElementById('navTabs');
       let html = '<div class="nav-tab active" onclick="showTOC()">📑 Innhold</div>';
       html += '<div class="nav-tab" onclick="showAll()">📋 Vis alle</div>';
-      html += '<div class="nav-tab" onclick="showForskrifter()">📂 Forskrifter</div>';
       html += '<div class="nav-tab" onclick="showChangelog()">📝 Endringslogg</div>';
       container.innerHTML = html;
     }
@@ -1050,34 +999,8 @@
       clippyOnChapter();
     }
 
-    function showForskrifter() {
-      setActiveTab(2);
-      currentView = 'forskrifter';
-      document.getElementById('toc').innerHTML = '';
-      document.getElementById('resultCount').textContent = `${forskrifterData.length} forskrifter med hjemmel i folketrygdloven`;
-
-      let html = '';
-      for (const f of forskrifterData) {
-        const label = f.shortTitle || f.title;
-        const dokPath = f.dokid.replace('SF/', 'forskrift/');
-        const refCount = f.ftrlRefs.length;
-        const refList = f.ftrlRefs.slice(0, 8).map(r => `<span class="forskrift-badge" style="cursor:default">${escHtml(r)}</span>`).join(' ');
-        const moreRefs = refCount > 8 ? `<span style="font-size:0.7rem;color:var(--text-muted)"> +${refCount - 8} til</span>` : '';
-
-        html += `<div class="article-card">
-          <div class="article-title" style="cursor:default">
-            <a href="https://lovdata.no/${dokPath}" target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:600">${escHtml(label)}</a>
-          </div>
-          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem">${escHtml(f.title)}</div>
-          <div style="margin-top:0.4rem">${refList}${moreRefs}</div>
-        </div>`;
-      }
-
-      document.getElementById('results').innerHTML = html;
-    }
-
     function showChangelog() {
-      setActiveTab(3);
+      setActiveTab(2);
       currentView = 'changelog';
       document.getElementById('toc').innerHTML = '';
       document.getElementById('resultCount').textContent = '';
@@ -1208,27 +1131,13 @@
           bodyHtml = highlightText(bodyHtml, query);
         }
 
-        // Add forskrifter badges
-        let forskriftHtml = '';
-        const paraName = refMatch ? refMatch[1].replace(/\s/g, '') : '';
-        const relatedF = paraName ? (forskrifterByPara[paraName] || []) : [];
-        if (relatedF.length > 0) {
-          forskriftHtml = '<div class="forskrift-section"><div class="forskrift-section-title">📂 Tilknyttede forskrifter</div>';
-          for (const f of relatedF) {
-            const label = f.shortTitle || f.title;
-            const dokPath = f.dokid.replace('SF/', 'forskrift/');
-            forskriftHtml += `<a class="forskrift-badge" href="https://lovdata.no/${dokPath}" target="_blank" rel="noopener" title="${escHtml(f.title)}">${escHtml(label)}</a> `;
-          }
-          forskriftHtml += '</div>';
-        }
-
         // Add changes toggle if paragraph has changesToParent
         let changesBtn = '';
         if (bodyHtml.includes('changesToParent')) {
           changesBtn = `<button class="changes-toggle" onclick="toggleChanges(this, '${para.id}')">Vis endringshistorikk</button>`;
         }
 
-        html += `<div class="article-body ${openClass}">${bodyHtml}${forskriftHtml}${changesBtn}</div>`;
+        html += `<div class="article-body ${openClass}">${bodyHtml}${changesBtn}</div>`;
         html += '</div>';
       }
 
@@ -1313,8 +1222,12 @@
       if (!card) return;
       const body = card.querySelector('.article-body');
       const chevron = card.querySelector('.chevron');
+      const isOpening = !body.classList.contains('open');
       body.classList.toggle('open');
       chevron.classList.toggle('open');
+      if (isOpening && Math.random() < 0.25) {
+        clippySay('paragraph');
+      }
     }
 
     function highlightText(html, query) {
@@ -1406,10 +1319,10 @@
         "Visste du at folketrygdloven har 426 paragrafer fordelt på 28 kapitler?",
         "Tips: Klikk på 🔗 ved en paragraf for å kopiere en direktelenke!",
         "Prøv mørkt tema! Klikk på 🌙 oppe til høyre.",
-        "Under «Forskrifter»-fanen finner du 142 forskrifter med hjemmel i loven.",
         "Tips: Lenker til andre paragrafer i lovteksten er klikkbare!",
         "Visste du at dataen oppdateres automatisk fra Lovdata hver uke?",
         "Tips: Du kan skjule meg med ✕-knappen. Jeg lover å ikke bli fornærmet. 🥲",
+        "Sjekk endringsloggen for å se hva som har endret seg i loven!",
       ],
       noResults: [
         "Hmm, ingen treff! Prøv et enklere søkeord eller et paragrafnummer som «§ 14-6».",
@@ -1421,7 +1334,14 @@
       ],
       chapter: [
         "Du ser nå på et helt kapittel. Klikk på en paragraftittel for å lese innholdet.",
-        "Visste du at du kan se tilknyttede forskrifter under hver paragraf?",
+        "Visste du at du kan dele lenken til en bestemt paragraf med 🔗-knappen?",
+      ],
+      paragraph: [
+        "Visste du at du kan klikke på lenker i lovteksten for å hoppe til andre paragrafer?",
+        "Tips: Klikk «Vis endringshistorikk» for å se når paragrafen sist ble endret.",
+        "Denne paragrafen kan ha interessante koblinger til andre deler av loven!",
+        "Husk at du kan søke etter stikkord for å finne relaterte bestemmelser.",
+        "Tips: Du kan kopiere en direktelenke til denne paragrafen med 🔗-knappen.",
       ],
     };
 
