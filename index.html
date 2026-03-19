@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Folketrygdloven – Søk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2a4a7f;
+      --accent: #3182ce;
+      --bg: #f7fafc;
+      --card-bg: #ffffff;
+      --text: #1a202c;
+      --text-muted: #718096;
+      --border: #e2e8f0;
+      --highlight: #fefcbf;
+      --highlight-border: #ecc94b;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    /* Search */
+    .search-container {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      padding: 1rem 0;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 0.5rem;
+      box-shadow: var(--shadow-lg);
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--accent);
+    }
+
+    .search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      padding: 0.5rem;
+      font-family: inherit;
+      background: transparent;
+    }
+
+    .search-box button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .search-box button:hover { background: var(--primary-light); }
+
+    .search-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      padding: 0 0.25rem;
+    }
+
+    /* Navigation */
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-tab {
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .nav-tab:hover { border-color: var(--accent); color: var(--accent); }
+    .nav-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* TOC */
+    .toc {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .toc h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--primary);
+    }
+
+    .toc-part {
+      margin-bottom: 0.75rem;
+    }
+
+    .toc-part-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-chapter {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      margin: 0.15rem;
+      font-size: 0.78rem;
+      color: var(--accent);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .toc-chapter:hover {
+      background: #ebf4ff;
+      text-decoration: underline;
+    }
+
+    /* Results / Articles */
+    .article-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: box-shadow 0.2s;
+    }
+
+    .article-card:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    .article-card.highlighted {
+      border-left: 4px solid var(--highlight-border);
+      background: linear-gradient(135deg, #fffff0 0%, var(--card-bg) 100%);
+    }
+
+    .article-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .article-title:hover { color: var(--accent); }
+
+    .article-title .chevron {
+      font-size: 0.75rem;
+      transition: transform 0.2s;
+      color: var(--text-muted);
+    }
+
+    .article-title .chevron.open { transform: rotate(90deg); }
+
+    .article-chapter-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+
+    .article-body {
+      display: none;
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #2d3748;
+    }
+
+    .article-body.open { display: block; }
+
+    .article-body p,
+    .article-body .legalP,
+    .article-body .numberedLegalP {
+      margin-bottom: 0.5rem;
+    }
+
+    .article-body mark {
+      background: var(--highlight);
+      padding: 0.1rem 0.15rem;
+      border-radius: 2px;
+    }
+
+    .article-body .footnote {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+    }
+
+    /* Chapter heading in results */
+    .chapter-heading {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 1.5rem 0 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: #ebf4ff;
+      border-radius: 8px;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 24px; height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* No results */
+    .no-results {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+
+    .no-results .emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.2rem; }
+      .container { padding: 0.5rem; }
+      .article-card { padding: 1rem; }
+      .nav-tabs { gap: 0.3rem; }
+      .nav-tab { font-size: 0.7rem; padding: 0.3rem 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📜 Folketrygdloven</h1>
+    <p>Søk i lov om folketrygd (LOV-1997-02-28-19)</p>
+  </header>
+
+  <div class="container">
+    <div class="search-container">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Søk etter paragraf, kapittel eller stikkord…" autofocus>
+        <button onclick="performSearch()">Søk</button>
+      </div>
+      <div class="search-meta">
+        <span id="resultCount"></span>
+        <span id="dataInfo"></span>
+      </div>
+    </div>
+
+    <div id="navTabs" class="nav-tabs"></div>
+    <div id="toc"></div>
+    <div id="results"></div>
+  </div>
+
+  <footer>
+    Data fra <a href="https://lovdata.no" target="_blank">Lovdata</a> (NLOD 2.0). 
+    Oppdatert <span id="lastUpdated"></span>. 
+    Denne siden er ikke en offisiell Lovdata-tjeneste.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+  <script>
+    let lawData = null;
+    let fuse = null;
+    let allParagraphs = [];
+    let currentView = 'toc';
+
+    async function init() {
+      document.getElementById('results').innerHTML = '<div class="loading"><div class="spinner"></div><br>Laster folketrygdloven…</div>';
+      
+      try {
+        const res = await fetch('folketrygdloven.json');
+        lawData = await res.json();
+        
+        // Flatten paragraphs for search
+        for (const part of lawData.parts) {
+          for (const chapter of part.chapters) {
+            for (const para of chapter.paragraphs) {
+              allParagraphs.push({
+                ...para,
+                chapterTitle: chapter.title,
+                partTitle: part.title,
+                searchText: `${para.title} ${para.text}`
+              });
+            }
+          }
+        }
+
+        // Init Fuse.js
+        fuse = new Fuse(allParagraphs, {
+          keys: [
+            { name: 'title', weight: 3 },
+            { name: 'text', weight: 1 }
+          ],
+          threshold: 0.3,
+          includeMatches: true,
+          ignoreLocation: true,
+          minMatchCharLength: 2
+        });
+
+        document.getElementById('dataInfo').textContent = `${allParagraphs.length} paragrafer`;
+        document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('nb-NO');
+        
+        buildNavTabs();
+        showTOC();
+      } catch (e) {
+        document.getElementById('results').innerHTML = '<div class="no-results"><div class="emoji">❌</div>Kunne ikke laste data. Sjekk at folketrygdloven.json finnes.</div>';
+        console.error(e);
+      }
+    }
+
+    function buildNavTabs() {
+      const container = document.getElementById('navTabs');
+      let html = '<div class="nav-tab active" onclick="showTOC()">📑 Innhold</div>';
+      html += '<div class="nav-tab" onclick="showAll()">📋 Vis alle</div>';
+      container.innerHTML = html;
+    }
+
+    function setActiveTab(index) {
+      document.querySelectorAll('.nav-tab').forEach((t, i) => {
+        t.classList.toggle('active', i === index);
+      });
+    }
+
+    function showTOC() {
+      setActiveTab(0);
+      currentView = 'toc';
+      let html = '<div class="toc"><h2>Innholdsfortegnelse</h2>';
+      for (const part of lawData.parts) {
+        html += `<div class="toc-part">`;
+        html += `<div class="toc-part-title">${escHtml(part.title)}</div>`;
+        for (const ch of part.chapters) {
+          html += `<span class="toc-chapter" onclick="showChapter('${ch.id}')">${escHtml(ch.title)}</span>`;
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+      document.getElementById('toc').innerHTML = html;
+      document.getElementById('results').innerHTML = '';
+      document.getElementById('resultCount').textContent = '';
+    }
+
+    function showAll() {
+      setActiveTab(1);
+      currentView = 'all';
+      document.getElementById('toc').innerHTML = '';
+      renderParagraphs(allParagraphs, '');
+      document.getElementById('resultCount').textContent = `Viser alle ${allParagraphs.length} paragrafer`;
+    }
+
+    function showChapter(chapterId) {
+      setActiveTab(-1);
+      currentView = 'chapter';
+      document.getElementById('toc').innerHTML = '';
+      const paras = allParagraphs.filter(p => {
+        // Match by checking if the paragraph's id starts with the relevant chapter
+        return findChapterForPara(p)?.id === chapterId;
+      });
+      const chapter = findChapterById(chapterId);
+      const title = chapter ? chapter.title : '';
+      document.getElementById('resultCount').textContent = `${title} – ${paras.length} paragrafer`;
+      renderParagraphs(paras, '', true);
+    }
+
+    function findChapterById(id) {
+      for (const part of lawData.parts) {
+        for (const ch of part.chapters) {
+          if (ch.id === id) return ch;
+        }
+      }
+      return null;
+    }
+
+    function findChapterForPara(para) {
+      for (const part of lawData.parts) {
+        for (const ch of part.chapters) {
+          if (ch.paragraphs.some(p => p.id === para.id)) return ch;
+        }
+      }
+      return null;
+    }
+
+    function performSearch() {
+      const query = document.getElementById('searchInput').value.trim();
+      if (!query) { showTOC(); return; }
+
+      setActiveTab(-1);
+      currentView = 'search';
+      document.getElementById('toc').innerHTML = '';
+
+      // Check for exact paragraph reference like "§ 4-3" or "4-3"
+      const paraRef = query.match(/§?\s*(\d+[-–]\d+\s*[a-z]?)/i);
+
+      let results;
+      if (paraRef) {
+        const normalized = paraRef[1].replace('–', '-').trim();
+        // Exact paragraph match first, then fuzzy
+        const exact = allParagraphs.filter(p => 
+          p.title.includes(`§ ${normalized}`) || p.title.includes(`§${normalized}`)
+        );
+        const fuzzy = fuse.search(query).map(r => r.item);
+        // Merge: exact first, then fuzzy (deduplicated)
+        const exactIds = new Set(exact.map(p => p.id));
+        results = [...exact, ...fuzzy.filter(p => !exactIds.has(p.id))];
+      } else {
+        results = fuse.search(query).map(r => r.item);
+      }
+
+      document.getElementById('resultCount').textContent = results.length > 0
+        ? `${results.length} treff for «${query}»`
+        : '';
+
+      if (results.length === 0) {
+        document.getElementById('results').innerHTML = `
+          <div class="no-results">
+            <div class="emoji">🔍</div>
+            Ingen treff for «${escHtml(query)}».<br>
+            <small>Prøv et annet søkeord, paragrafnummer (f.eks. § 8-4), eller stikkord.</small>
+          </div>`;
+        return;
+      }
+
+      renderParagraphs(results, query, results.length <= 5);
+    }
+
+    function renderParagraphs(paragraphs, query, autoExpand = false) {
+      let html = '';
+      let currentChapter = '';
+
+      for (const para of paragraphs) {
+        const ch = para.chapterTitle || '';
+        if (ch !== currentChapter) {
+          currentChapter = ch;
+          html += `<div class="chapter-heading">${escHtml(ch)}</div>`;
+        }
+
+        const isHighlighted = query && para.title.toLowerCase().includes(query.toLowerCase());
+        const openClass = autoExpand ? 'open' : '';
+
+        html += `<div class="article-card${isHighlighted ? ' highlighted' : ''}" id="card-${para.id}">`;
+        html += `<div class="article-chapter-label">${escHtml(para.partTitle || '')}</div>`;
+        html += `<div class="article-title" onclick="toggleArticle('${para.id}')">
+                   <span>${escHtml(para.title)}</span>
+                   <span class="chevron ${openClass ? 'open' : ''}">▶</span>
+                 </div>`;
+        
+        let bodyHtml = para.html;
+        // Highlight search terms in body
+        if (query) {
+          bodyHtml = highlightText(bodyHtml, query);
+        }
+        html += `<div class="article-body ${openClass}">${bodyHtml}</div>`;
+        html += '</div>';
+      }
+
+      document.getElementById('results').innerHTML = html;
+    }
+
+    function toggleArticle(id) {
+      const card = document.getElementById('card-' + id);
+      if (!card) return;
+      const body = card.querySelector('.article-body');
+      const chevron = card.querySelector('.chevron');
+      body.classList.toggle('open');
+      chevron.classList.toggle('open');
+    }
+
+    function highlightText(html, query) {
+      // Don't highlight inside HTML tags
+      const words = query.split(/\s+/).filter(w => w.length > 1);
+      for (const word of words) {
+        const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(?<=>)([^<]*?)(${escaped})`, 'gi');
+        html = html.replace(regex, (match, before, term) => `${before}<mark>${term}</mark>`);
+      }
+      return html;
+    }
+
+    function escHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    // Search on Enter
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('searchInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') performSearch();
+      });
+      init();
+    });
+  </script>
+</body>
+</html>
