@@ -623,6 +623,158 @@
       font-style: italic;
     }
 
+    /* Clippy */
+    .clippy-container {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: opacity 0.3s;
+    }
+
+    .clippy-container.hidden { display: none; }
+
+    .clippy-bubble {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 12px 12px 12px 0;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      max-width: 260px;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: var(--text);
+      box-shadow: var(--shadow-lg);
+      animation: clippy-pop 0.3s ease-out;
+      position: relative;
+    }
+
+    .clippy-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 16px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid var(--border);
+      border-right: 8px solid transparent;
+      border-top: 8px solid var(--card-bg);
+    }
+
+    .clippy-bubble .clippy-close-bubble {
+      position: absolute;
+      top: 0.25rem;
+      right: 0.4rem;
+      background: none;
+      border: none;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.1rem;
+    }
+
+    .clippy-bubble .clippy-close-bubble:hover { color: var(--text); }
+
+    .clippy-bubble.hidden { display: none; }
+
+    @keyframes clippy-pop {
+      0% { transform: scale(0.8) translateY(8px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .clippy-character {
+      width: 60px;
+      height: 70px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .clippy-character:hover { transform: scale(1.1); }
+
+    .clippy-character:active { transform: scale(0.95); }
+
+    /* Clippy SVG paperclip with eyes */
+    .clippy-body {
+      position: relative;
+      width: 60px;
+      height: 70px;
+    }
+
+    .clippy-dismiss {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      transition: all 0.15s;
+      z-index: 1;
+    }
+
+    .clippy-dismiss:hover {
+      background: #e53e3e;
+      color: white;
+      border-color: #e53e3e;
+    }
+
+    /* Bring-back button when dismissed */
+    .clippy-restore {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.35rem 0.6rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      z-index: 300;
+      transition: transform 0.2s;
+    }
+
+    .clippy-restore:hover { transform: scale(1.1); }
+    .clippy-restore.hidden { display: none; }
+
+    /* Clippy idle animation */
+    @keyframes clippy-idle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    .clippy-character.idle { animation: clippy-idle 3s ease-in-out infinite; }
+
+    /* Blink animation for eyes */
+    @keyframes blink {
+      0%, 90%, 100% { transform: scaleY(1); }
+      95% { transform: scaleY(0.1); }
+    }
+
+    .clippy-eye { animation: blink 4s ease-in-out infinite; }
+    .clippy-eye:last-of-type { animation-delay: 0.1s; }
+
+    @media (max-width: 800px) {
+      .clippy-container { bottom: 1rem; left: 1rem; }
+      .clippy-bubble { max-width: 200px; font-size: 0.75rem; }
+      .clippy-character { width: 45px; height: 53px; }
+      .clippy-body { width: 45px; height: 53px; }
+      .clippy-restore { bottom: 1rem; left: 1rem; }
+    }
+
     /* Mobile */
     @media (max-width: 800px) {
       .container { flex-direction: column; }
@@ -701,6 +853,34 @@
   </footer>
 
   <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Tilbake til toppen">↑</button>
+
+  <!-- Clippy -->
+  <div class="clippy-container" id="clippyContainer">
+    <div class="clippy-bubble" id="clippyBubble">
+      <button class="clippy-close-bubble" onclick="clippyDismissBubble()" title="Lukk">✕</button>
+      <span id="clippyText"></span>
+    </div>
+    <div class="clippy-character idle" onclick="clippySpeak()" title="Klikk for tips!">
+      <div class="clippy-body">
+        <button class="clippy-dismiss" onclick="event.stopPropagation();clippyDismiss()" title="Fjern binders-assistenten">✕</button>
+        <svg viewBox="0 0 60 70" xmlns="http://www.w3.org/2000/svg">
+          <!-- Paperclip body -->
+          <path d="M20 65 L20 20 Q20 8 32 8 Q44 8 44 20 L44 50 Q44 58 36 58 Q28 58 28 50 L28 24"
+                fill="none" stroke="#a0aec0" stroke-width="4" stroke-linecap="round"/>
+          <!-- Left eye -->
+          <ellipse class="clippy-eye" cx="28" cy="18" rx="3.5" ry="4.5" fill="white" stroke="#4a5568" stroke-width="1.5"/>
+          <ellipse cx="29" cy="19" rx="1.5" ry="2" fill="#1a202c"/>
+          <!-- Right eye -->
+          <ellipse class="clippy-eye" cx="40" cy="18" rx="3.5" ry="4.5" fill="white" stroke="#4a5568" stroke-width="1.5"/>
+          <ellipse cx="41" cy="19" rx="1.5" ry="2" fill="#1a202c"/>
+          <!-- Eyebrows -->
+          <path d="M24 12 Q28 10 32 12" fill="none" stroke="#4a5568" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M36 12 Q40 10 44 12" fill="none" stroke="#4a5568" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <button class="clippy-restore hidden" id="clippyRestore" onclick="clippyRestore()" title="Vis binders-assistenten">📎</button>
 
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
   <script>
@@ -867,6 +1047,7 @@
       const title = chapter ? chapter.title : '';
       document.getElementById('resultCount').textContent = `${title} – ${paras.length} paragrafer`;
       renderParagraphs(paras, '', true);
+      clippyOnChapter();
     }
 
     function showForskrifter() {
@@ -984,10 +1165,12 @@
             Ingen treff for «${escHtml(query)}».<br>
             <small>Prøv et annet søkeord, paragrafnummer (f.eks. § 8-4), eller stikkord.</small>
           </div>`;
+        clippyOnSearch(false);
         return;
       }
 
       renderParagraphs(results, query, results.length <= 5);
+      clippyOnSearch(true);
     }
 
     function renderParagraphs(paragraphs, query, autoExpand = false) {
@@ -1211,6 +1394,120 @@
       });
     }
 
+    // --- Clippy ---
+    const clippyTips = {
+      welcome: [
+        "Hei! 📎 Jeg er Binderen – din juridiske assistent! Klikk på meg for tips.",
+        "Velkommen! Visste du at du kan søke etter paragrafnummer? Prøv f.eks. «§ 8-4».",
+        "Hei der! Bruk innholdsfortegnelsen til venstre for å navigere i loven. 📑",
+      ],
+      idle: [
+        "Trenger du hjelp? Prøv å søke etter «sykepenger» eller «dagpenger».",
+        "Visste du at folketrygdloven har 426 paragrafer fordelt på 28 kapitler?",
+        "Tips: Klikk på 🔗 ved en paragraf for å kopiere en direktelenke!",
+        "Prøv mørkt tema! Klikk på 🌙 oppe til høyre.",
+        "Under «Forskrifter»-fanen finner du 142 forskrifter med hjemmel i loven.",
+        "Tips: Lenker til andre paragrafer i lovteksten er klikkbare!",
+        "Visste du at dataen oppdateres automatisk fra Lovdata hver uke?",
+        "Tips: Du kan skjule meg med ✕-knappen. Jeg lover å ikke bli fornærmet. 🥲",
+      ],
+      noResults: [
+        "Hmm, ingen treff! Prøv et enklere søkeord eller et paragrafnummer som «§ 14-6».",
+        "Fant ingenting? Prøv å søke med færre ord, eller se i innholdsfortegnelsen.",
+      ],
+      search: [
+        "Godt søk! Husk at du kan klikke på paragraftittelen for å utvide innholdet.",
+        "Tips: Treff sorteres etter relevans. De beste treffene kommer først!",
+      ],
+      chapter: [
+        "Du ser nå på et helt kapittel. Klikk på en paragraftittel for å lese innholdet.",
+        "Visste du at du kan se tilknyttede forskrifter under hver paragraf?",
+      ],
+    };
+
+    let clippyTimer = null;
+    let clippyVisible = true;
+    let lastClippyCategory = '';
+
+    function clippyInit() {
+      if (localStorage.getItem('clippyDismissed') === 'true') {
+        document.getElementById('clippyContainer').classList.add('hidden');
+        document.getElementById('clippyRestore').classList.remove('hidden');
+        clippyVisible = false;
+        return;
+      }
+      setTimeout(() => clippySay('welcome'), 1500);
+      clippyStartIdleTimer();
+    }
+
+    function clippySay(category) {
+      if (!clippyVisible) return;
+      lastClippyCategory = category;
+      const tips = clippyTips[category] || clippyTips.idle;
+      const tip = tips[Math.floor(Math.random() * tips.length)];
+      const bubble = document.getElementById('clippyBubble');
+      const text = document.getElementById('clippyText');
+      text.textContent = tip;
+      bubble.classList.remove('hidden');
+      bubble.style.animation = 'none';
+      bubble.offsetHeight; // trigger reflow
+      bubble.style.animation = '';
+      // Auto-hide after 8 seconds
+      clearTimeout(clippyTimer);
+      clippyTimer = setTimeout(() => {
+        bubble.classList.add('hidden');
+        clippyStartIdleTimer();
+      }, 8000);
+    }
+
+    function clippySpeak() {
+      // On click, give a random tip
+      clippySay('idle');
+    }
+
+    function clippyDismissBubble() {
+      document.getElementById('clippyBubble').classList.add('hidden');
+      clippyStartIdleTimer();
+    }
+
+    function clippyDismiss() {
+      clippyVisible = false;
+      localStorage.setItem('clippyDismissed', 'true');
+      document.getElementById('clippyContainer').classList.add('hidden');
+      document.getElementById('clippyRestore').classList.remove('hidden');
+      clearTimeout(clippyTimer);
+    }
+
+    function clippyRestore() {
+      clippyVisible = true;
+      localStorage.removeItem('clippyDismissed');
+      document.getElementById('clippyContainer').classList.remove('hidden');
+      document.getElementById('clippyRestore').classList.add('hidden');
+      clippySay('welcome');
+      clippyStartIdleTimer();
+    }
+
+    let clippyIdleTimer = null;
+    function clippyStartIdleTimer() {
+      clearTimeout(clippyIdleTimer);
+      clippyIdleTimer = setTimeout(() => {
+        if (clippyVisible) clippySay('idle');
+      }, 45000); // every 45 seconds when idle
+    }
+
+    // Hook into page events
+    function clippyOnSearch(hasResults) {
+      if (hasResults) {
+        if (Math.random() < 0.3) clippySay('search');
+      } else {
+        clippySay('noResults');
+      }
+    }
+
+    function clippyOnChapter() {
+      if (Math.random() < 0.3) clippySay('chapter');
+    }
+
     // Search on Enter
     document.addEventListener('DOMContentLoaded', () => {
       loadTheme();
@@ -1218,7 +1515,10 @@
       document.getElementById('searchInput').addEventListener('keydown', e => {
         if (e.key === 'Enter') performSearch();
       });
-      init().then(() => handleHashNavigation());
+      init().then(() => {
+        handleHashNavigation();
+        clippyInit();
+      });
     });
 
     window.addEventListener('hashchange', handleHashNavigation);
