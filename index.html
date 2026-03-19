@@ -539,6 +539,90 @@
       padding-top: 0.5rem;
     }
 
+    /* Forskrifter badge */
+    .forskrift-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      background: rgba(49, 130, 206, 0.1);
+      color: var(--accent);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      margin: 0.15rem 0.1rem;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .forskrift-badge:hover {
+      border-color: var(--accent);
+      background: rgba(49, 130, 206, 0.2);
+    }
+
+    .forskrift-section {
+      margin-top: 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--border);
+    }
+
+    .forskrift-section-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+
+    /* Changelog */
+    .changelog-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .changelog-card h3 {
+      font-size: 1rem;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .changelog-entry {
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .changelog-entry:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .changelog-date {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    .changelog-item {
+      font-size: 0.8rem;
+      color: var(--text);
+      padding: 0.15rem 0 0.15rem 1rem;
+      position: relative;
+    }
+
+    .changelog-item::before {
+      content: "•";
+      position: absolute;
+      left: 0.3rem;
+      color: var(--accent);
+    }
+
+    .changelog-empty {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
     /* Mobile */
     @media (max-width: 800px) {
       .container { flex-direction: column; }
@@ -624,8 +708,11 @@
     let fuse = null;
     let allParagraphs = [];
     let currentView = 'toc';
-    // Maps "§X-Y" -> paragraph object for internal navigation
     let paraByRef = {};
+    let forskrifterData = [];
+    let changelogData = null;
+    // Maps §-ref -> list of forskrifter referencing it
+    let forskrifterByPara = {};
 
     async function init() {
       document.getElementById('results').innerHTML = '<div class="loading"><div class="spinner"></div><br>Laster folketrygdloven…</div>';
@@ -672,7 +759,27 @@
 
         document.getElementById('dataInfo').textContent = `${allParagraphs.length} paragrafer`;
         document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('nb-NO');
-        
+
+        // Load forskrifter
+        try {
+          const fRes = await fetch('forskrifter.json');
+          forskrifterData = await fRes.json();
+          // Build lookup: §-ref -> forskrifter
+          for (const f of forskrifterData) {
+            for (const ref of f.ftrlRefs) {
+              const key = ref.replace(/\s/g, '');
+              if (!forskrifterByPara[key]) forskrifterByPara[key] = [];
+              forskrifterByPara[key].push(f);
+            }
+          }
+        } catch(e) { console.warn('Kunne ikke laste forskrifter:', e); }
+
+        // Load changelog
+        try {
+          const cRes = await fetch('changelog.json');
+          changelogData = await cRes.json();
+        } catch(e) { console.warn('Kunne ikke laste endringslogg:', e); }
+
         buildSidebar();
         buildNavTabs();
         showTOC();
@@ -686,6 +793,8 @@
       const container = document.getElementById('navTabs');
       let html = '<div class="nav-tab active" onclick="showTOC()">📑 Innhold</div>';
       html += '<div class="nav-tab" onclick="showAll()">📋 Vis alle</div>';
+      html += '<div class="nav-tab" onclick="showForskrifter()">📂 Forskrifter</div>';
+      html += '<div class="nav-tab" onclick="showChangelog()">📝 Endringslogg</div>';
       container.innerHTML = html;
     }
 
@@ -752,13 +861,72 @@
       currentView = 'chapter';
       document.getElementById('toc').innerHTML = '';
       const paras = allParagraphs.filter(p => {
-        // Match by checking if the paragraph's id starts with the relevant chapter
         return findChapterForPara(p)?.id === chapterId;
       });
       const chapter = findChapterById(chapterId);
       const title = chapter ? chapter.title : '';
       document.getElementById('resultCount').textContent = `${title} – ${paras.length} paragrafer`;
       renderParagraphs(paras, '', true);
+    }
+
+    function showForskrifter() {
+      setActiveTab(2);
+      currentView = 'forskrifter';
+      document.getElementById('toc').innerHTML = '';
+      document.getElementById('resultCount').textContent = `${forskrifterData.length} forskrifter med hjemmel i folketrygdloven`;
+
+      let html = '';
+      for (const f of forskrifterData) {
+        const label = f.shortTitle || f.title;
+        const dokPath = f.dokid.replace('SF/', 'forskrift/');
+        const refCount = f.ftrlRefs.length;
+        const refList = f.ftrlRefs.slice(0, 8).map(r => `<span class="forskrift-badge" style="cursor:default">${escHtml(r)}</span>`).join(' ');
+        const moreRefs = refCount > 8 ? `<span style="font-size:0.7rem;color:var(--text-muted)"> +${refCount - 8} til</span>` : '';
+
+        html += `<div class="article-card">
+          <div class="article-title" style="cursor:default">
+            <a href="https://lovdata.no/${dokPath}" target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:600">${escHtml(label)}</a>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem">${escHtml(f.title)}</div>
+          <div style="margin-top:0.4rem">${refList}${moreRefs}</div>
+        </div>`;
+      }
+
+      document.getElementById('results').innerHTML = html;
+    }
+
+    function showChangelog() {
+      setActiveTab(3);
+      currentView = 'changelog';
+      document.getElementById('toc').innerHTML = '';
+      document.getElementById('resultCount').textContent = '';
+
+      let html = '<div class="changelog-card"><h3>📝 Endringslogg</h3>';
+
+      if (!changelogData || !changelogData.entries || changelogData.entries.length === 0) {
+        html += '<p class="changelog-empty">Ingen endringer registrert ennå. Endringsloggen oppdateres automatisk hver mandag.</p>';
+      } else {
+        html += `<p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem">Sist sjekket: ${changelogData.lastChecked || 'Ukjent'}. Sist endret: ${changelogData.lastChanged || 'Ukjent'}.</p>`;
+
+        for (const entry of changelogData.entries) {
+          html += '<div class="changelog-entry">';
+          html += `<div class="changelog-date">${entry.date}${entry.type === 'initial' ? ' – Oppstart' : ''}</div>`;
+
+          if (entry.description) {
+            html += `<div class="changelog-item">${escHtml(entry.description)}</div>`;
+          }
+
+          if (entry.changes) {
+            for (const change of entry.changes) {
+              html += `<div class="changelog-item">${escHtml(change)}</div>`;
+            }
+          }
+          html += '</div>';
+        }
+      }
+
+      html += '</div>';
+      document.getElementById('results').innerHTML = html;
     }
 
     function findChapterById(id) {
@@ -857,13 +1025,27 @@
           bodyHtml = highlightText(bodyHtml, query);
         }
 
+        // Add forskrifter badges
+        let forskriftHtml = '';
+        const paraName = refMatch ? refMatch[1].replace(/\s/g, '') : '';
+        const relatedF = paraName ? (forskrifterByPara[paraName] || []) : [];
+        if (relatedF.length > 0) {
+          forskriftHtml = '<div class="forskrift-section"><div class="forskrift-section-title">📂 Tilknyttede forskrifter</div>';
+          for (const f of relatedF) {
+            const label = f.shortTitle || f.title;
+            const dokPath = f.dokid.replace('SF/', 'forskrift/');
+            forskriftHtml += `<a class="forskrift-badge" href="https://lovdata.no/${dokPath}" target="_blank" rel="noopener" title="${escHtml(f.title)}">${escHtml(label)}</a> `;
+          }
+          forskriftHtml += '</div>';
+        }
+
         // Add changes toggle if paragraph has changesToParent
         let changesBtn = '';
         if (bodyHtml.includes('changesToParent')) {
           changesBtn = `<button class="changes-toggle" onclick="toggleChanges(this, '${para.id}')">Vis endringshistorikk</button>`;
         }
 
-        html += `<div class="article-body ${openClass}">${bodyHtml}${changesBtn}</div>`;
+        html += `<div class="article-body ${openClass}">${bodyHtml}${forskriftHtml}${changesBtn}</div>`;
         html += '</div>';
       }
 
