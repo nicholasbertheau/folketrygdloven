@@ -830,12 +830,300 @@
     @media (min-width: 801px) {
       .mobile-toc-toggle { display: none; }
     }
+
+    /* Pension Guide */
+    .pension-header-btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .pension-header-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
+    [data-theme="dark"] .pension-header-btn {
+      background: rgba(99,179,237,0.15);
+      border-color: rgba(99,179,237,0.3);
+      color: var(--accent);
+    }
+    [data-theme="dark"] .pension-header-btn:hover { background: rgba(99,179,237,0.25); }
+
+    .pension-guide {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .pension-guide h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .pension-guide .pension-intro {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .pension-input-group {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .pension-input-group input {
+      width: 160px;
+      padding: 0.75rem 1rem;
+      font-size: 1.2rem;
+      font-family: inherit;
+      font-weight: 600;
+      text-align: center;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--card-bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .pension-input-group input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(49,130,206,0.15);
+    }
+    .pension-input-group button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .pension-input-group button:hover { background: var(--primary-light); transform: translateY(-1px); }
+
+    .pension-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+    .pension-divider::before, .pension-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .pension-cohort-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .pension-cohort-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pension-cohort-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    .pension-cohort-card .cohort-icon { font-size: 1.5rem; margin-bottom: 0.35rem; }
+    .pension-cohort-card .cohort-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    .pension-cohort-card .cohort-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .pension-cohort-card.kap19 { border-color: #dd6b20; }
+    .pension-cohort-card.kap19:hover { border-color: #c05621; background: rgba(221,107,32,0.04); }
+    .pension-cohort-card.transition { border-color: #805ad5; }
+    .pension-cohort-card.transition:hover { border-color: #6b46c1; background: rgba(128,90,213,0.04); }
+    .pension-cohort-card.kap20 { border-color: #3182ce; }
+    .pension-cohort-card.kap20:hover { border-color: #2b6cb0; background: rgba(49,130,206,0.04); }
+
+    /* Pension results */
+    .pension-result-box {
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      border-left: 5px solid var(--accent);
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+    }
+    .pension-result-box.kap19 { border-left-color: #dd6b20; }
+    .pension-result-box.kap20 { border-left-color: #3182ce; }
+    .pension-result-box.transition { border-left-color: #805ad5; }
+    .pension-result-box h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    .pension-result-box p {
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+    }
+    .pension-result-box p:last-child { margin-bottom: 0; }
+    .pension-result-box .cohort-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      margin-bottom: 0.5rem;
+    }
+    .pension-result-box.kap19 .cohort-tag { background: rgba(221,107,32,0.12); color: #c05621; }
+    .pension-result-box.kap20 .cohort-tag { background: rgba(49,130,206,0.12); color: #2b6cb0; }
+    .pension-result-box.transition .cohort-tag { background: rgba(128,90,213,0.12); color: #6b46c1; }
+    [data-theme="dark"] .pension-result-box.kap19 .cohort-tag { background: rgba(221,107,32,0.2); color: #ed8936; }
+    [data-theme="dark"] .pension-result-box.kap20 .cohort-tag { background: rgba(49,130,206,0.2); color: #63b3ed; }
+    [data-theme="dark"] .pension-result-box.transition .cohort-tag { background: rgba(128,90,213,0.2); color: #b794f4; }
+
+    .pension-proportion-bar {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 28px;
+      margin: 0.75rem 0;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .pension-proportion-bar .bar-kap19 {
+      background: #dd6b20;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: width 0.4s;
+    }
+    .pension-proportion-bar .bar-kap20 {
+      background: #3182ce;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: width 0.4s;
+    }
+
+    .pension-chapter-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--shadow);
+    }
+    .pension-chapter-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+    }
+    .pension-chapter-card .chapter-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+    .pension-chapter-card.kap19-card { border-left: 4px solid #dd6b20; }
+    .pension-chapter-card.kap20-card { border-left: 4px solid #3182ce; }
+    .pension-chapter-card.transition-card { border-left: 4px solid #805ad5; }
+
+    .pension-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .pension-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.65rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      background: rgba(49,130,206,0.08);
+      color: var(--accent);
+      border: 1px solid rgba(49,130,206,0.2);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    .pension-link:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .pension-link.highlight {
+      background: rgba(128,90,213,0.1);
+      color: #805ad5;
+      border-color: rgba(128,90,213,0.3);
+      font-weight: 600;
+    }
+    .pension-link.highlight:hover {
+      background: #805ad5;
+      color: white;
+      border-color: #805ad5;
+    }
+    [data-theme="dark"] .pension-link.highlight { color: #b794f4; border-color: rgba(183,148,244,0.3); background: rgba(128,90,213,0.15); }
+    [data-theme="dark"] .pension-link.highlight:hover { background: #805ad5; color: white; }
+
+    .pension-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: none;
+      color: var(--accent);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      margin-bottom: 1rem;
+      transition: all 0.15s;
+    }
+    .pension-back-btn:hover { border-color: var(--accent); background: rgba(49,130,206,0.06); }
+
+    @media (max-width: 600px) {
+      .pension-cohort-cards { grid-template-columns: 1fr; }
+      .pension-input-group { flex-direction: column; align-items: center; }
+      .pension-input-group input { width: 100%; max-width: 200px; }
+      .pension-guide h2 { font-size: 1.25rem; }
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>📜 Folketrygdloven</h1>
     <p>Søk i lov om folketrygd (LOV-1997-02-28-19)</p>
+    <button class="pension-header-btn" onclick="showPensionGuide()">🏦 Pensjonsguide</button>
     <button class="theme-toggle" onclick="toggleTheme()" title="Bytt tema">🌙</button>
   </header>
 
@@ -977,6 +1265,7 @@
       const container = document.getElementById('navTabs');
       let html = '<div class="nav-tab active" onclick="showTOC()">📑 Innhold</div>';
       html += '<div class="nav-tab" onclick="showAll()">📋 Vis alle</div>';
+      html += '<div class="nav-tab" onclick="showPensionGuide()">🏦 Pensjon</div>';
       html += '<div class="nav-tab" onclick="showChangelog()">📝 Endringslogg</div>';
       container.innerHTML = html;
     }
@@ -1054,7 +1343,7 @@
     }
 
     function showChangelog() {
-      setActiveTab(2);
+      setActiveTab(3);
       currentView = 'changelog';
       document.getElementById('toc').innerHTML = '';
       document.getElementById('resultCount').textContent = '';
@@ -1574,6 +1863,212 @@
     });
 
     window.addEventListener('hashchange', handleHashNavigation);
+
+    // --- Pension Guide ---
+    function showPensionGuide() {
+      setActiveTab(2);
+      currentView = 'pension';
+      document.getElementById('toc').innerHTML = '';
+      document.getElementById('resultCount').textContent = '';
+      document.querySelectorAll('.sidebar-chapter').forEach(el => el.classList.remove('active'));
+
+      const currentYear = new Date().getFullYear();
+      document.getElementById('results').innerHTML = `
+        <div class="pension-guide">
+          <h2>🏦 Finn dine pensjonsregler</h2>
+          <p class="pension-intro">
+            Hvilke pensjonsregler som gjelder for deg avhenger av når du er født.
+            Skriv inn fødselsåret ditt for å se hvilke bestemmelser i folketrygdloven som gjelder for deg.
+          </p>
+          <div class="pension-input-group">
+            <input type="number" id="pensionBirthYear" min="1900" max="${currentYear}"
+                   placeholder="F.eks. 1965" aria-label="Fødselsår">
+            <button onclick="pensionFromInput()">Finn mine regler</button>
+          </div>
+          <div class="pension-divider">eller velg gruppe</div>
+          <div class="pension-cohort-cards">
+            <div class="pension-cohort-card kap19" onclick="showPensionResults(1950)">
+              <div class="cohort-icon">📜</div>
+              <div class="cohort-label">1953 eller tidligere</div>
+              <div class="cohort-desc">Kun kapittel 19 – gammelt system</div>
+            </div>
+            <div class="pension-cohort-card transition" onclick="showPensionResults(1958)">
+              <div class="cohort-icon">⚖️</div>
+              <div class="cohort-label">1954–1962</div>
+              <div class="cohort-desc">Overgangsregler – blanding av kap. 19 og 20</div>
+            </div>
+            <div class="pension-cohort-card kap20" onclick="showPensionResults(1970)">
+              <div class="cohort-icon">🆕</div>
+              <div class="cohort-label">1963 eller senere</div>
+              <div class="cohort-desc">Kun kapittel 20 – nytt system</div>
+            </div>
+          </div>
+        </div>`;
+
+      const input = document.getElementById('pensionBirthYear');
+      if (input) {
+        input.addEventListener('keydown', e => { if (e.key === 'Enter') pensionFromInput(); });
+        input.focus();
+      }
+    }
+
+    function pensionFromInput() {
+      const input = document.getElementById('pensionBirthYear');
+      if (!input) return;
+      const year = parseInt(input.value, 10);
+      const currentYear = new Date().getFullYear();
+      if (isNaN(year) || year < 1900 || year > currentYear) {
+        input.style.borderColor = '#e53e3e';
+        input.focus();
+        setTimeout(() => input.style.borderColor = '', 1500);
+        return;
+      }
+      showPensionResults(year);
+    }
+
+    function showPensionResults(birthYear) {
+      currentView = 'pension';
+      setActiveTab(2);
+      document.getElementById('toc').innerHTML = '';
+      document.getElementById('resultCount').textContent = '';
+      document.querySelectorAll('.sidebar-chapter').forEach(el => el.classList.remove('active'));
+
+      let cohort, cohortClass, tagText, explanation, proportion19 = 0, proportion20 = 0;
+
+      if (birthYear <= 1953) {
+        cohort = 'kap19';
+        cohortClass = 'kap19';
+        tagText = 'Kapittel 19 – Gammelt system';
+        explanation = `<p>Du er født i <strong>${birthYear}</strong> og omfattes fullt ut av det <strong>gamle pensjonssystemet</strong> i folketrygdloven kapittel 19.</p>
+          <p>Din alderspensjon beregnes etter reglene om <strong>grunnpensjon</strong> og <strong>tilleggspensjon</strong> basert på opptjente pensjonspoeng. Du kan ta ut pensjon fra 67 år.</p>`;
+      } else if (birthYear >= 1963) {
+        cohort = 'kap20';
+        cohortClass = 'kap20';
+        tagText = 'Kapittel 20 – Nytt system';
+        explanation = `<p>Du er født i <strong>${birthYear}</strong> og omfattes fullt ut av det <strong>nye pensjonssystemet</strong> i folketrygdloven kapittel 20.</p>
+          <p>Din alderspensjon beregnes som <strong>inntektspensjon</strong> fra en pensjonsbeholdning, eventuelt med <strong>garantipensjon</strong>. Du kan ta ut pensjon fleksibelt fra 62 år.</p>`;
+      } else {
+        cohort = 'transition';
+        cohortClass = 'transition';
+        proportion19 = 10 - (birthYear - 1953);
+        proportion20 = birthYear - 1953;
+        tagText = `Overgangsregler – ${proportion19}/10 kap. 19 + ${proportion20}/10 kap. 20`;
+        explanation = `<p>Du er født i <strong>${birthYear}</strong> og omfattes av <strong>overgangsreglene</strong>. Din pensjon beregnes som en blanding av gammelt og nytt system.</p>
+          <p>Fordelingen for ditt årskull: <strong>${proportion19}/10</strong> etter kapittel 19 (gammelt system) og <strong>${proportion20}/10</strong> etter kapittel 20 (nytt system).</p>
+          <p>De sentrale overgangsbestemmelsene er <strong>§ 19-15</strong> og <strong>§ 20-19</strong>.</p>`;
+      }
+
+      let html = `<div class="pension-guide">
+        <button class="pension-back-btn" onclick="showPensionGuide()">← Tilbake til pensjonsguiden</button>
+        <div class="pension-result-box ${cohortClass}">
+          <span class="cohort-tag">${escHtml(tagText)}</span>
+          <h3>Pensjonsregler for årskull ${birthYear <= 1953 ? '1953 og tidligere' : birthYear >= 1963 ? '1963 og senere' : birthYear}</h3>
+          ${explanation}`;
+
+      if (cohort === 'transition') {
+        const pct19 = proportion19 * 10;
+        const pct20 = proportion20 * 10;
+        html += `<div class="pension-proportion-bar">
+          <div class="bar-kap19" style="width:${pct19}%">${pct19 > 15 ? `Kap. 19: ${pct19}%` : `${pct19}%`}</div>
+          <div class="bar-kap20" style="width:${pct20}%">${pct20 > 15 ? `Kap. 20: ${pct20}%` : `${pct20}%`}</div>
+        </div>`;
+      }
+
+      html += `</div>`;
+
+      // Chapter 19 info
+      if (cohort === 'kap19' || cohort === 'transition') {
+        html += `<div class="pension-chapter-card ${cohort === 'transition' ? 'transition-card' : 'kap19-card'}">
+          <h4>📜 Kapittel 19 – Alderspensjon (gammelt system)</h4>
+          <div class="chapter-desc">
+            Kapittel 19 gjelder det opprinnelige pensjonssystemet med <strong>grunnpensjon</strong> og <strong>tilleggspensjon</strong>.
+            Tilleggspensjon beregnes ut fra de 20 beste inntektsårene (pensjonspoeng). Pensjonen tas ut fra 67 år${cohort === 'transition' ? ', men for overgangskullet gjelder fleksibelt uttak fra 62 år' : ''}.
+          </div>
+          <div class="pension-links">
+            <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-1')">📖 Vis hele kap. 19</a>`;
+        if (cohort === 'transition') {
+          html += `<a class="pension-link highlight" onclick="navigateToPensionPara('kapittel-6-kapittel-1-paragraf-19')" title="Overgangsbestemmelse">⭐ § 19-15 (overgang)</a>`;
+        }
+        html += `</div></div>`;
+      }
+
+      // Chapter 20 info
+      if (cohort === 'kap20' || cohort === 'transition') {
+        html += `<div class="pension-chapter-card ${cohort === 'transition' ? 'transition-card' : 'kap20-card'}">
+          <h4>🆕 Kapittel 20 – Ny alderspensjon</h4>
+          <div class="chapter-desc">
+            Kapittel 20 gjelder det nye pensjonssystemet med <strong>pensjonsbeholdning</strong> og <strong>inntektspensjon</strong>.
+            All pensjonsgivende inntekt fra 13 til 75 år teller. Pensjonen kan tas ut fleksibelt fra 62 år. 
+            Garantipensjon erstatter minstepensjon.
+          </div>
+          <div class="pension-links">
+            <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2')">📖 Vis hele kap. 20</a>`;
+        if (cohort === 'transition') {
+          html += `<a class="pension-link highlight" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-21')" title="Overgangsbestemmelse">⭐ § 20-19 (overgang)</a>`;
+        }
+        html += `</div></div>`;
+      }
+
+      // Transition cohort: proportion table
+      if (cohort === 'transition') {
+        html += `<div class="pension-chapter-card transition-card">
+          <h4>⚖️ Forholdstall per årskull</h4>
+          <div class="chapter-desc">Tabellen viser fordelingen mellom gammelt (kap. 19) og nytt (kap. 20) system for hvert overgangsårskull.</div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin-top:0.5rem">
+            <thead><tr style="border-bottom:2px solid var(--border)">
+              <th style="padding:0.4rem 0.5rem;text-align:left;color:var(--text-muted)">Fødselsår</th>
+              <th style="padding:0.4rem 0.5rem;text-align:center;color:#dd6b20">Kap. 19</th>
+              <th style="padding:0.4rem 0.5rem;text-align:center;color:#3182ce">Kap. 20</th>
+            </tr></thead><tbody>`;
+        for (let y = 1954; y <= 1962; y++) {
+          const k19 = 10 - (y - 1953);
+          const k20 = y - 1953;
+          const isActive = y === birthYear;
+          const rowStyle = isActive
+            ? 'background:rgba(128,90,213,0.1);font-weight:700;border-radius:6px'
+            : '';
+          html += `<tr style="${rowStyle};border-bottom:1px solid var(--border)">
+            <td style="padding:0.35rem 0.5rem">${y}${isActive ? ' ← du' : ''}</td>
+            <td style="padding:0.35rem 0.5rem;text-align:center;color:#dd6b20">${k19}/10</td>
+            <td style="padding:0.35rem 0.5rem;text-align:center;color:#3182ce">${k20}/10</td>
+          </tr>`;
+        }
+        html += `</tbody></table></div>`;
+      }
+
+      html += `</div>`;
+      document.getElementById('results').innerHTML = html;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function navigateToPensionPara(id) {
+      // If it's a chapter ID (no -paragraf-), show the whole chapter
+      if (!id.includes('-paragraf-')) {
+        showChapter(id);
+      } else {
+        // Find the paragraph by its ID and navigate to it
+        const para = allParagraphs.find(p => p.id === id);
+        if (para) {
+          const ch = findChapterForPara(para);
+          if (ch) {
+            showChapter(ch.id);
+            setTimeout(() => {
+              const card = document.getElementById('card-' + id);
+              if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.classList.add('highlighted');
+                const body = card.querySelector('.article-body');
+                const chevron = card.querySelector('.chevron');
+                if (body && !body.classList.contains('open')) {
+                  body.classList.add('open');
+                  if (chevron) chevron.classList.add('open');
+                }
+              }
+            }, 150);
+          }
+        }
+      }
+    }
   </script>
 </body>
 </html>
