@@ -1123,6 +1123,176 @@
     }
     .pension-back-btn:hover { border-color: var(--accent); background: rgba(49,130,206,0.06); }
 
+    /* Pension paragraph groups */
+    .pension-para-group {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .pension-para-group:last-child { border-bottom: none; padding-bottom: 0; }
+    .pension-para-group:first-child { padding-top: 0; }
+    .pension-para-group-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+    }
+    .pension-para-group-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 0.45rem;
+    }
+
+    /* Pension calculation examples */
+    .pension-example {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+      background: var(--card-bg);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .pension-example.kap19-example { border-left: 4px solid #dd6b20; }
+    .pension-example.kap20-example { border-left: 4px solid #3182ce; }
+    .pension-example.transition-example { border-left: 4px solid #805ad5; }
+    .pension-example-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: left;
+      transition: background 0.15s;
+    }
+    .pension-example-toggle:hover { background: rgba(49,130,206,0.04); }
+    .pension-example-toggle .toggle-icon {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      transition: transform 0.25s;
+    }
+    .pension-example-toggle.open .toggle-icon { transform: rotate(180deg); }
+    .pension-example-content {
+      padding: 0 1.25rem 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    .pension-example-scenario {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 0.75rem 0;
+      padding: 0.5rem 0.75rem;
+      background: rgba(49,130,206,0.04);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+    }
+
+    /* Calculation steps */
+    .pension-step {
+      padding: 0.45rem 0 0.45rem 1rem;
+      border-left: 3px solid var(--border);
+      margin-bottom: 0.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    .pension-step.result {
+      border-left-color: var(--accent);
+      background: rgba(49,130,206,0.04);
+      border-radius: 0 8px 8px 0;
+      padding: 0.55rem 0.75rem 0.55rem 1rem;
+      font-weight: 600;
+    }
+    .pension-step .step-label {
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.4;
+      flex: 1;
+    }
+    .pension-step .step-value {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .pension-step.result .step-value { font-size: 0.9rem; }
+
+    /* Formula display */
+    .pension-formula {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      margin: 0.5rem 0;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    /* Bar chart */
+    .pension-bar-chart {
+      display: flex;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 36px;
+      margin: 0.75rem 0;
+      font-size: 0.72rem;
+      font-weight: 600;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .pension-bar-segment {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding: 0 0.5rem;
+      white-space: nowrap;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: width 0.4s;
+    }
+    .pension-bar-segment.seg-grunnpensjon { background: #dd6b20; }
+    .pension-bar-segment.seg-tilleggspensjon { background: #e53e3e; }
+    .pension-bar-segment.seg-inntektspensjon { background: #3182ce; }
+    .pension-bar-segment.seg-garantipensjon { background: #38a169; }
+    .pension-bar-segment.seg-kap19 { background: #dd6b20; }
+    .pension-bar-segment.seg-kap20 { background: #3182ce; }
+
+    /* Disclaimer note */
+    .pension-note {
+      font-size: 0.75rem;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.5;
+      padding: 0.75rem 1rem;
+      margin-top: 0.75rem;
+      background: rgba(237,137,54,0.06);
+      border: 1px solid rgba(237,137,54,0.15);
+      border-radius: 8px;
+    }
+
+    /* Born-before-1937 highlight */
+    .pension-highlight-box {
+      padding: 0.6rem 0.85rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      background: rgba(237,137,54,0.08);
+      border: 1px solid rgba(237,137,54,0.2);
+      color: var(--text);
+    }
+
     @media (max-width: 600px) {
       .pension-cohort-cards { grid-template-columns: 1fr; }
       .pension-input-group { flex-direction: column; align-items: center; }
@@ -1959,12 +2129,25 @@
       showPensionResults(year);
     }
 
+    function togglePensionExample(id) {
+      const el = document.getElementById(id);
+      const btn = el.previousElementSibling;
+      const isHidden = el.style.display === 'none';
+      el.style.display = isHidden ? 'block' : 'none';
+      btn.setAttribute('aria-expanded', String(isHidden));
+      btn.querySelector('.toggle-icon').textContent = isHidden ? '▲' : '▼';
+      if (isHidden) btn.classList.add('open'); else btn.classList.remove('open');
+    }
+
     function showPensionResults(birthYear) {
       currentView = 'pension';
       setActiveTab(2);
       document.getElementById('toc').innerHTML = '';
       document.getElementById('resultCount').textContent = '';
       document.querySelectorAll('.sidebar-chapter').forEach(el => el.classList.remove('active'));
+
+      const fmt = n => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');
+      const G = 124028;
 
       let cohort, cohortClass, tagText, explanation, proportion19 = 0, proportion20 = 0;
 
@@ -2009,58 +2192,343 @@
 
       html += `</div>`;
 
-      // Chapter 3 info (beregningsregler - relevant for kap 19 system)
+      // ===== CHAPTER 3 – Beregningsregler =====
       if (cohort === 'kap19' || cohort === 'transition') {
-        html += `<div class="pension-chapter-card kap19-card">
+        html += `<div class="pension-chapter-card kap3-card">
           <h4>🧮 Kapittel 3 – Beregningsregler</h4>
           <div class="chapter-desc">
-            Kapittel 3 inneholder reglene for beregning av <strong>grunnpensjon</strong>, <strong>særtillegg</strong>, <strong>trygdetid</strong>, <strong>pensjonspoeng</strong> og <strong>tilleggspensjon</strong>.
-            Disse reglene brukes ved beregning av alderspensjon etter kapittel 19 (gammelt system)${cohort === 'transition' ? ', altså den delen av din pensjon som beregnes etter gammelt system' : ''}.
+            Kapittel 3 inneholder beregningsreglene som brukes ved beregning av alderspensjon etter kapittel 19 (gammelt system)${cohort === 'transition' ? ', altså den delen av din pensjon som beregnes etter gammelt system' : ''}.
+            Bestemmelsene om pensjonsgivende inntekt (§ 3-15) gjelder også for det nye systemet i kapittel 20.
+          </div>`;
+
+        if (birthYear < 1937) {
+          html += `<div class="pension-highlight-box">⚠️ <strong>Viktig for deg født før 1937:</strong> § 3-9 inneholder særregler som reduserer kravet for full tilleggspensjon til 20 poengår (i stedet for 40). <a class="pension-link" style="display:inline" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-2')">→ § 3-9</a></div>`;
+        }
+
+        // Group: Grunnpensjon
+        html += `<div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Grunnpensjon (basispensjon)</div>
+            <div class="pension-para-group-desc">Grunnpensjon krever 40 års trygdetid for fullt beløp (1G). Gis uavhengig av tidligere inntekt.</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-1-paragraf-1')">§ 3-2 Grunnpensjon</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-1-paragraf-2')">§ 3-3 Særtillegg</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-1-paragraf-4')">§ 3-5 Trygdetid</a>
+            </div>
+          </div>`;
+
+        // Group: Tilleggspensjon
+        html += `<div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Tilleggspensjon (inntektsbasert)</div>
+            <div class="pension-para-group-desc">Tilleggspensjon beregnes fra de 20 beste poengårene. Krever minst 5 poengår. Opptjent fra pensjonsgivende inntekt over 1G.</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-1')">§ 3-8 Tilleggspensjon</a>`;
+        if (birthYear < 1937) {
+          html += `<a class="pension-link highlight" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-2')" title="Særregler for født før 1937">⭐ § 3-9 Særregler</a>`;
+        }
+        html += `<a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-3')">§ 3-10 Poengår</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-4')">§ 3-11 Sluttpoengtall</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-5')">§ 3-12 Pensjonspoeng</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-6')">§ 3-13 Opptjening</a>
+            </div>
+          </div>`;
+
+        // Group: Pensjonsgivende inntekt
+        html += `<div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Pensjonsgivende inntekt</div>
+            <div class="pension-para-group-desc">Definerer hva som regnes som pensjonsgivende inntekt. Grunnleggende for begge pensjonssystemer.</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-8')">§ 3-15 Pensjonsgivende inntekt</a>
+            </div>
+          </div>`;
+
+        // Group: Omsorgsopptjening og andre
+        html += `<div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Omsorgsopptjening og særlige grupper</div>
+            <div class="pension-para-group-desc">Omsorgspoeng for barnepass og pleie av eldre/syke, samt opptjening for uføretrygdede.</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-9')">§ 3-16 Omsorgspoeng</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-paragraf-1')">§ 3-1 Internasjonal samordning</a>
+            </div>
+          </div>`;
+
+        html += `<div style="margin-top:0.5rem"><a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1')">📖 Vis hele kapittel 3</a></div>`;
+        html += `</div>`;
+
+      } else {
+        // kap20 cohort: Chapter 3 is only relevant for § 3-15 and § 3-1
+        html += `<div class="pension-chapter-card kap3-card">
+          <h4>🧮 Kapittel 3 – Pensjonsgivende inntekt</h4>
+          <div class="chapter-desc">
+            For det nye pensjonssystemet i kapittel 20 er det i hovedsak <strong>§ 3-15</strong> (pensjonsgivende inntekt) som er relevant fra kapittel 3.
+            Denne bestemmelsen definerer hva som regnes som pensjonsgivende inntekt, og er grunnlaget for opptjening etter § 20-5.
           </div>
-          <div class="pension-links">
-            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1')">📖 Vis hele kap. 3</a>
-            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-1-paragraf-1')">§ 3-2 Grunnpensjon</a>
-            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-1-paragraf-4')">§ 3-5 Trygdetid</a>
-            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-1')">§ 3-8 Tilleggspensjon</a>
-            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-5')">§ 3-12 Pensjonspoeng</a>
-            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-8')">§ 3-15 Pensjonsgiv. inntekt</a>
-          </div></div>`;
+          <div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Relevante bestemmelser</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-8')">§ 3-15 Pensjonsgivende inntekt</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-paragraf-1')">§ 3-1 Internasjonal samordning</a>
+            </div>
+          </div>
+        </div>`;
       }
 
-      // Chapter 19 info
+      // ===== CHAPTER 19 – Alderspensjon (gammelt system) =====
       if (cohort === 'kap19' || cohort === 'transition') {
         html += `<div class="pension-chapter-card ${cohort === 'transition' ? 'transition-card' : 'kap19-card'}">
           <h4>📜 Kapittel 19 – Alderspensjon (gammelt system)</h4>
           <div class="chapter-desc">
             Kapittel 19 gjelder det opprinnelige pensjonssystemet med <strong>grunnpensjon</strong> og <strong>tilleggspensjon</strong>.
-            Tilleggspensjon beregnes ut fra de 20 beste inntektsårene (pensjonspoeng). Pensjonen tas ut fra 67 år${cohort === 'transition' ? ', men for overgangskullet gjelder fleksibelt uttak fra 62 år' : ''}.
-          </div>
-          <div class="pension-links">
-            <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-1')">📖 Vis hele kap. 19</a>`;
+            Tilleggspensjon beregnes ut fra de 20 beste inntektsårene (sluttpoengtall)${cohort === 'transition' ? '. For overgangskullet gjelder fleksibelt uttak fra 62 år.' : '. Uttak fra 67 år.'}
+          </div>`;
+
+        // Group: Beregning og uttak
+        html += `<div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Beregning og uttak</div>
+            <div class="pension-para-group-desc">Reglene for sammenstilling av basispensjon (§ 19-5), levealdersjustering, minste pensjonsnivå og uttaksregler.</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-1-paragraf-8')">§ 19-5 Basispensjon</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-1-paragraf-9')">§ 19-6 Levealdersjustering</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-1-paragraf-11')">§ 19-8 Minste pensjonsnivå</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-1-paragraf-14')">§ 19-10 Uttak</a>
+            </div>
+          </div>`;
+
         if (cohort === 'transition') {
-          html += `<a class="pension-link highlight" onclick="navigateToPensionPara('kapittel-6-kapittel-1-paragraf-19')" title="Overgangsbestemmelse">⭐ § 19-15 (overgang)</a>`;
+          html += `<div class="pension-para-group">
+              <div class="pension-para-group-title">⭐ Overgangsbestemmelse</div>
+              <div class="pension-para-group-desc">Fastsetter hvordan pensjonen skal blandes mellom gammelt og nytt system for ditt årskull.</div>
+              <div class="pension-links">
+                <a class="pension-link highlight" onclick="navigateToPensionPara('kapittel-6-kapittel-1-paragraf-19')">§ 19-15 Overgangsregler</a>
+              </div>
+            </div>`;
         }
-        html += `</div></div>`;
+
+        html += `<div style="margin-top:0.5rem"><a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-1')">📖 Vis hele kapittel 19</a></div>`;
+        html += `</div>`;
       }
 
-      // Chapter 20 info
+      // ===== CHAPTER 20 – Ny alderspensjon =====
       if (cohort === 'kap20' || cohort === 'transition') {
         html += `<div class="pension-chapter-card ${cohort === 'transition' ? 'transition-card' : 'kap20-card'}">
           <h4>🆕 Kapittel 20 – Ny alderspensjon</h4>
           <div class="chapter-desc">
             Kapittel 20 gjelder det nye pensjonssystemet med <strong>pensjonsbeholdning</strong> og <strong>inntektspensjon</strong>.
-            All pensjonsgivende inntekt fra 13 til 75 år teller. Pensjonen kan tas ut fleksibelt fra 62 år. 
+            All pensjonsgivende inntekt fra 13 til 75 år teller. Pensjonen kan tas ut fleksibelt fra 62 år.
             Garantipensjon erstatter minstepensjon.
-          </div>
-          <div class="pension-links">
-            <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2')">📖 Vis hele kap. 20</a>`;
+          </div>`;
+
+        // Group: Pensjonsbeholdning og opptjening
+        html += `<div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Pensjonsbeholdning og opptjening</div>
+            <div class="pension-para-group-desc">Pensjonsbeholdningen bygges opp med 18,1 % av pensjonsgivende inntekt hvert år. Inntekt opp til 7,1G teller fullt ut.</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-5')">§ 20-4 Pensjonsbeholdning</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-6')">§ 20-5 Opptjening fra inntekt</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-8')">§ 3-15 Pensjonsgivende inntekt</a>
+            </div>
+          </div>`;
+
+        // Group: Andre opptjeningskilder
+        html += `<div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Andre opptjeningskilder</div>
+            <div class="pension-para-group-desc">Opptjening fra førstegangstjeneste, dagpenger, uføretrygd og omsorgsarbeid.</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-7')">§ 20-6 Førstegangstjeneste</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-8')">§ 20-7 Dagpenger</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-9')">§ 20-7a Uføretrygd</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-10')">§ 20-8 Omsorgsarbeid</a>
+            </div>
+          </div>`;
+
+        // Group: Garantipensjon
+        html += `<div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Garantipensjon</div>
+            <div class="pension-para-group-desc">Garantipensjon sikrer et minstenivå. Full garantipensjon krever 40 års trygdetid. Avkortes mot inntektspensjon.</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-11')">§ 20-9 Satser</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-12')">§ 20-10 Trygdetid</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-13')">§ 20-11 Garantipensjonsbeholdning</a>
+            </div>
+          </div>`;
+
+        // Group: Levealdersjustering og uttak
+        html += `<div class="pension-para-group">
+            <div class="pension-para-group-title">📋 Levealdersjustering og uttak</div>
+            <div class="pension-para-group-desc">Pensjonsbeholdningen deles på et delingstall som avhenger av forventet levealder for årskullet. Fleksibelt uttak fra 62 år.</div>
+            <div class="pension-links">
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-14')">§ 20-12 Delingstall</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-16')">§ 20-14 Inntektspensjon</a>
+              <a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-17')">§ 20-15 Uttak</a>
+            </div>
+          </div>`;
+
         if (cohort === 'transition') {
-          html += `<a class="pension-link highlight" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-21')" title="Overgangsbestemmelse">⭐ § 20-19 (overgang)</a>`;
+          html += `<div class="pension-para-group">
+              <div class="pension-para-group-title">⭐ Overgangsbestemmelse</div>
+              <div class="pension-para-group-desc">Fastsetter hvordan pensjonen skal blandes mellom gammelt og nytt system for ditt årskull.</div>
+              <div class="pension-links">
+                <a class="pension-link highlight" onclick="navigateToPensionPara('kapittel-6-kapittel-2-paragraf-21')">§ 20-19 Overgangsregler</a>
+              </div>
+            </div>`;
         }
-        html += `</div></div>`;
+
+        html += `<div style="margin-top:0.5rem"><a class="pension-link" onclick="navigateToPensionPara('kapittel-6-kapittel-2')">📖 Vis hele kapittel 20</a></div>`;
+        html += `</div>`;
       }
 
-      // Transition cohort: proportion table
+      // ===== CALCULATION EXAMPLES =====
+
+      // Kap 19 example (for kap19 and transition)
+      if (cohort === 'kap19' || cohort === 'transition') {
+        const grunnpensjon = G;
+        const poeng = 5;
+        const sluttpoengtall = 5;
+        const tilleggspensjon = Math.round(0.45 * sluttpoengtall * G * (40/40));
+        const basispensjon = grunnpensjon + tilleggspensjon;
+        const forholdstall = 1.025;
+        const justert = Math.round(basispensjon / forholdstall);
+
+        const grunnPct = Math.round((grunnpensjon / basispensjon) * 100);
+        const tillPct = 100 - grunnPct;
+
+        html += `<div class="pension-example kap19-example">
+          <button class="pension-example-toggle" aria-expanded="false" onclick="togglePensionExample('example-kap19')">
+            📊 Eksempel: Slik beregnes pensjon etter kap.\u00a019
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="pension-example-content" id="example-kap19" style="display:none">
+            <div class="pension-example-scenario">
+              <strong>Kari, født 1950</strong>, har jobbet i 40 år med gjennomsnittlig inntekt på 6G (${fmt(6 * G)} kr/år). Full trygdetid.
+            </div>
+            <div class="pension-step">
+              <span class="step-label"><strong>1.</strong> Grunnpensjon (full trygdetid 40 år) = 1G</span>
+              <span class="step-value">${fmt(grunnpensjon)} kr</span>
+            </div>
+            <div class="pension-step">
+              <span class="step-label"><strong>2.</strong> Pensjonspoeng per år: (6G − 1G) / G = 5,00</span>
+              <span class="step-value">5,00 poeng</span>
+            </div>
+            <div class="pension-step">
+              <span class="step-label"><strong>3.</strong> Sluttpoengtall (gjennomsnitt av 20 beste år)</span>
+              <span class="step-value">5,00</span>
+            </div>
+            <div class="pension-formula">Tilleggspensjon = 0,45 × sluttpoengtall × G × (poengår/40)
+= 0,45 × 5,00 × ${fmt(G)} × (40/40) = ${fmt(tilleggspensjon)} kr</div>
+            <div class="pension-step">
+              <span class="step-label"><strong>4.</strong> Tilleggspensjon (§ 3-8)</span>
+              <span class="step-value">${fmt(tilleggspensjon)} kr</span>
+            </div>
+            <div class="pension-step result">
+              <span class="step-label"><strong>5.</strong> Basispensjon (§ 19-5) = Grunnpensjon + Tilleggspensjon</span>
+              <span class="step-value">${fmt(basispensjon)} kr</span>
+            </div>
+            <div class="pension-bar-chart">
+              <div class="pension-bar-segment seg-grunnpensjon" style="width:${grunnPct}%">Grunnpensjon ${fmt(grunnpensjon)}</div>
+              <div class="pension-bar-segment seg-tilleggspensjon" style="width:${tillPct}%">Tilleggspensjon ${fmt(tilleggspensjon)}</div>
+            </div>
+            <div class="pension-step">
+              <span class="step-label"><strong>6.</strong> Levealdersjustering (§ 19-6): Basispensjon / forholdstall ${forholdstall.toFixed(3)} ved 67 år</span>
+              <span class="step-value">≈ ${fmt(justert)} kr/år</span>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      // Kap 20 example (for kap20 and transition)
+      if (cohort === 'kap20' || cohort === 'transition') {
+        const inntekt = 550000;
+        const opptjeningssats = 0.181;
+        const aarligOpptjening = Math.round(inntekt * opptjeningssats);
+        const antallAar = 42;
+        const beholdning = aarligOpptjening * antallAar;
+        const delingstall = 15.69;
+        const inntektspensjon = Math.round(beholdning / delingstall);
+
+        html += `<div class="pension-example kap20-example">
+          <button class="pension-example-toggle" aria-expanded="false" onclick="togglePensionExample('example-kap20')">
+            📊 Eksempel: Slik beregnes pensjon etter kap.\u00a020
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="pension-example-content" id="example-kap20" style="display:none">
+            <div class="pension-example-scenario">
+              <strong>Ola, født 1970</strong>, har jobbet fra 25 til 67 år (42 år) med inntekt ${fmt(inntekt)} kr/år.
+            </div>
+            <div class="pension-step">
+              <span class="step-label"><strong>1.</strong> Pensjonsgivende inntekt (§ 3-15)</span>
+              <span class="step-value">${fmt(inntekt)} kr/år</span>
+            </div>
+            <div class="pension-formula">Årlig opptjening = 18,1 % × pensjonsgivende inntekt
+= 0,181 × ${fmt(inntekt)} = ${fmt(aarligOpptjening)} kr per år</div>
+            <div class="pension-step">
+              <span class="step-label"><strong>2.</strong> Årlig opptjening til pensjonsbeholdning (§ 20-5)</span>
+              <span class="step-value">${fmt(aarligOpptjening)} kr/år</span>
+            </div>
+            <div class="pension-step">
+              <span class="step-label"><strong>3.</strong> Pensjonsbeholdning etter ${antallAar} år (forenklet, uten regulering)</span>
+              <span class="step-value">${fmt(beholdning)} kr</span>
+            </div>
+            <div class="pension-formula">Inntektspensjon = pensjonsbeholdning / delingstall
+= ${fmt(beholdning)} / ${delingstall.toFixed(2)} ≈ ${fmt(inntektspensjon)} kr/år</div>
+            <div class="pension-step result">
+              <span class="step-label"><strong>4.</strong> Inntektspensjon (§ 20-14) ved 67 år (delingstall ${delingstall.toFixed(2)})</span>
+              <span class="step-value">≈ ${fmt(inntektspensjon)} kr/år</span>
+            </div>
+            <div class="pension-bar-chart">
+              <div class="pension-bar-segment seg-inntektspensjon" style="width:100%">Pensjonsbeholdning ${fmt(beholdning)} kr ÷ ${delingstall.toFixed(2)} = ${fmt(inntektspensjon)} kr/år</div>
+            </div>
+            <div class="pension-step">
+              <span class="step-label"><strong>5.</strong> Garantipensjon (§ 20-9): Kun aktuelt dersom inntektspensjon er lav – fungerer som sikkerhetsnett</span>
+              <span class="step-value">—</span>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      // Transition calculation example
+      if (cohort === 'transition') {
+        const kap19Pensjon = 403091;
+        const kap20Pensjon = 266480;
+        const andel19 = proportion19 / 10;
+        const andel20 = proportion20 / 10;
+        const kap19Del = Math.round(kap19Pensjon * andel19);
+        const kap20Del = Math.round(kap20Pensjon * andel20);
+        const total = kap19Del + kap20Del;
+        const pct19 = Math.round(andel19 * 100);
+        const pct20 = 100 - pct19;
+
+        html += `<div class="pension-example transition-example">
+          <button class="pension-example-toggle" aria-expanded="false" onclick="togglePensionExample('example-transition')">
+            📊 Eksempel: Slik beregnes din blandede pensjon
+            <span class="toggle-icon">▼</span>
+          </button>
+          <div class="pension-example-content" id="example-transition" style="display:none">
+            <div class="pension-example-scenario">
+              <strong>Person født ${birthYear}</strong> – pensjonen beregnes ${proportion19}/10 etter kap. 19 og ${proportion20}/10 etter kap. 20.
+              Eksempelet bruker beløpene fra beregningseksemplene over.
+            </div>
+            <div class="pension-formula">Kap. 19-pensjon (fra eksempelet): ${fmt(kap19Pensjon)} kr/år
+Kap. 20-pensjon (fra eksempelet): ${fmt(kap20Pensjon)} kr/år</div>
+            <div class="pension-step">
+              <span class="step-label"><strong>1.</strong> Kap. 19-andel: ${proportion19}/10 × ${fmt(kap19Pensjon)}</span>
+              <span class="step-value">${fmt(kap19Del)} kr</span>
+            </div>
+            <div class="pension-step">
+              <span class="step-label"><strong>2.</strong> Kap. 20-andel: ${proportion20}/10 × ${fmt(kap20Pensjon)}</span>
+              <span class="step-value">${fmt(kap20Del)} kr</span>
+            </div>
+            <div class="pension-step result">
+              <span class="step-label"><strong>3.</strong> Samlet pensjon (§ 19-15 / § 20-19)</span>
+              <span class="step-value">${fmt(total)} kr/år</span>
+            </div>
+            <div class="pension-bar-chart">
+              <div class="pension-bar-segment seg-kap19" style="width:${pct19}%">${pct19 > 15 ? `Kap. 19: ${fmt(kap19Del)}` : fmt(kap19Del)}</div>
+              <div class="pension-bar-segment seg-kap20" style="width:${pct20}%">${pct20 > 15 ? `Kap. 20: ${fmt(kap20Del)}` : fmt(kap20Del)}</div>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      // ===== TRANSITION PROPORTION TABLE =====
       if (cohort === 'transition') {
         html += `<div class="pension-chapter-card transition-card">
           <h4>⚖️ Forholdstall per årskull</h4>
@@ -2086,6 +2554,9 @@
         }
         html += `</tbody></table></div>`;
       }
+
+      // ===== DISCLAIMER =====
+      html += `<div class="pension-note">⚠️ Beregningseksemplene er forenklede illustrasjoner. Faktisk pensjon avhenger av dine konkrete inntekts- og trygdetidsforhold, regulering av grunnbeløpet, og levealdersjustering for ditt årskull. For nøyaktig beregning, se <a href="https://www.nav.no/pensjon" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">nav.no/pensjon</a>.</div>`;
 
       html += `</div>`;
       document.getElementById('results').innerHTML = html;
