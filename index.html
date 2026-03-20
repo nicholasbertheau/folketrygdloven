@@ -831,28 +831,39 @@
       .mobile-toc-toggle { display: none; }
     }
 
-    /* Pension Guide */
-    .pension-header-btn {
-      display: inline-block;
-      margin-top: 0.5rem;
-      padding: 0.4rem 1rem;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.3);
+    /* Mode switcher */
+    .mode-switcher {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: white;
+      overflow: hidden;
+      width: fit-content;
+    }
+    .mode-btn {
+      padding: 0.45rem 1rem;
+      border: none;
+      background: var(--card-bg);
+      color: var(--text-muted);
       font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
       font-family: inherit;
-      transition: background 0.2s, transform 0.15s;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
     }
-    .pension-header-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
-    [data-theme="dark"] .pension-header-btn {
-      background: rgba(99,179,237,0.15);
-      border-color: rgba(99,179,237,0.3);
-      color: var(--accent);
+    .mode-btn:not(:last-child) {
+      border-right: 1px solid var(--border);
     }
-    [data-theme="dark"] .pension-header-btn:hover { background: rgba(99,179,237,0.25); }
+    .mode-btn:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+    .mode-btn.active {
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
 
     .pension-guide {
       max-width: 700px;
@@ -1123,7 +1134,6 @@
 <body>
   <header>
     <h1>Ftrl.</h1>
-    <button class="pension-header-btn" onclick="showPensionGuide()">🏦 Pensjonsguide</button>
     <button class="theme-toggle" onclick="toggleTheme()" title="Bytt tema">🌙</button>
   </header>
 
@@ -1147,6 +1157,11 @@
           <span id="resultCount"></span>
           <span id="dataInfo"></span>
         </div>
+      </div>
+
+      <div class="mode-switcher">
+        <button class="mode-btn active" id="modeLaw" onclick="switchMode('law')">📜 Hele folketrygdloven</button>
+        <button class="mode-btn" id="modePension" onclick="switchMode('pension')">🏦 Pensjon</button>
       </div>
 
       <div id="navTabs" class="nav-tabs"></div>
@@ -1265,7 +1280,6 @@
       const container = document.getElementById('navTabs');
       let html = '<div class="nav-tab active" onclick="showTOC()">📑 Innhold</div>';
       html += '<div class="nav-tab" onclick="showAll()">📋 Vis alle</div>';
-      html += '<div class="nav-tab" onclick="showPensionGuide()">🏦 Pensjon</div>';
       html += '<div class="nav-tab" onclick="showChangelog()">📝 Endringslogg</div>';
       container.innerHTML = html;
     }
@@ -1305,6 +1319,9 @@
     function showTOC() {
       setActiveTab(0);
       currentView = 'toc';
+      document.getElementById('modeLaw').classList.add('active');
+      document.getElementById('modePension').classList.remove('active');
+      document.getElementById('navTabs').style.display = '';
       let html = '<div class="toc"><h2>Innholdsfortegnelse</h2>';
       for (const part of lawData.parts) {
         html += `<div class="toc-part">`;
@@ -1864,9 +1881,25 @@
 
     window.addEventListener('hashchange', handleHashNavigation);
 
+    // --- Mode Switcher ---
+    function switchMode(mode) {
+      document.getElementById('modeLaw').classList.toggle('active', mode === 'law');
+      document.getElementById('modePension').classList.toggle('active', mode === 'pension');
+      if (mode === 'pension') {
+        document.getElementById('navTabs').style.display = 'none';
+        showPensionGuide();
+      } else {
+        document.getElementById('navTabs').style.display = '';
+        showTOC();
+      }
+    }
+
     // --- Pension Guide ---
     function showPensionGuide() {
-      setActiveTab(2);
+      setActiveTab(-1);
+      document.getElementById('modeLaw').classList.remove('active');
+      document.getElementById('modePension').classList.add('active');
+      document.getElementById('navTabs').style.display = 'none';
       currentView = 'pension';
       document.getElementById('toc').innerHTML = '';
       document.getElementById('resultCount').textContent = '';
