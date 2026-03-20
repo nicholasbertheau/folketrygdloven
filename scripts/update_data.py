@@ -108,7 +108,7 @@ def parse_law(html_content):
             }
 
             for article in kap_section.find_all(
-                "article", class_="legalArticle", recursive=False
+                "article", class_="legalArticle"
             ):
                 header = article.find(
                     ["h4", "h5", "h6", "div"], class_="legalArticleHeader"
@@ -304,19 +304,11 @@ def main():
 
     # Load existing data for changelog comparison
     old_law = None
-    old_forskrifter = None
     law_path = os.path.join(root_dir, OUTPUT_FILE)
-    forskrifter_path = os.path.join(root_dir, FORSKRIFTER_FILE)
 
     try:
         with open(law_path, "r", encoding="utf-8") as f:
             old_law = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        pass
-
-    try:
-        with open(forskrifter_path, "r", encoding="utf-8") as f:
-            old_forskrifter = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         pass
 
@@ -333,13 +325,8 @@ def main():
         total_chapters = sum(len(p["chapters"]) for p in law_data["parts"])
         print(f"Lov: {len(law_data['parts'])} deler, {total_chapters} kapitler, {total_paras} paragrafer")
 
-        # Download and parse forskrifter
-        sf_dir = download_and_extract_forskrifter(tmpdir)
-        forskrifter = parse_forskrifter(sf_dir)
-        print(f"Forskrifter med hjemmel i ftrl: {len(forskrifter)}")
-
     # Update changelog
-    changes = update_changelog(root_dir, old_law, law_data, old_forskrifter, forskrifter)
+    changes = update_changelog(root_dir, old_law, law_data, None, None)
     if changes:
         print(f"Endringslogg: {len(changes)} endringer")
         for c in changes[:5]:
@@ -351,11 +338,6 @@ def main():
     with open(law_path, "w", encoding="utf-8") as f:
         json.dump(law_data, f, ensure_ascii=False, indent=2)
     print(f"Lagret {law_path}")
-
-    # Save forskrifter
-    with open(forskrifter_path, "w", encoding="utf-8") as f:
-        json.dump(forskrifter, f, ensure_ascii=False, indent=2)
-    print(f"Lagret {forskrifter_path}")
 
 
 if __name__ == "__main__":

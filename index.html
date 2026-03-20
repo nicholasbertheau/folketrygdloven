@@ -1051,6 +1051,7 @@
       margin-bottom: 0.75rem;
     }
     .pension-chapter-card.kap19-card { border-left: 4px solid #dd6b20; }
+    .pension-chapter-card.kap3-card { border-left: 4px solid #d69e2e; }
     .pension-chapter-card.kap20-card { border-left: 4px solid #3182ce; }
     .pension-chapter-card.transition-card { border-left: 4px solid #805ad5; }
 
@@ -1659,7 +1660,7 @@
       ],
       idle: [
         "Trenger du hjelp? Prøv å søke etter «sykepenger» eller «dagpenger».",
-        "Visste du at folketrygdloven har 426 paragrafer fordelt på 28 kapitler?",
+        "Visste du at folketrygdloven har over 540 paragrafer fordelt på 28 kapitler?",
         "Tips: Klikk på 🔗 ved en paragraf for å kopiere en direktelenke!",
         "Prøv mørkt tema! Klikk på 🌙 oppe til høyre.",
         "Tips: Lenker til andre paragrafer i lovteksten er klikkbare!",
@@ -1975,6 +1976,24 @@
       }
 
       html += `</div>`;
+
+      // Chapter 3 info (beregningsregler - relevant for kap 19 system)
+      if (cohort === 'kap19' || cohort === 'transition') {
+        html += `<div class="pension-chapter-card kap19-card">
+          <h4>🧮 Kapittel 3 – Beregningsregler</h4>
+          <div class="chapter-desc">
+            Kapittel 3 inneholder reglene for beregning av <strong>grunnpensjon</strong>, <strong>særtillegg</strong>, <strong>trygdetid</strong>, <strong>pensjonspoeng</strong> og <strong>tilleggspensjon</strong>.
+            Disse reglene brukes ved beregning av alderspensjon etter kapittel 19 (gammelt system)${cohort === 'transition' ? ', altså den delen av din pensjon som beregnes etter gammelt system' : ''}.
+          </div>
+          <div class="pension-links">
+            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1')">📖 Vis hele kap. 3</a>
+            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-1-paragraf-1')">§ 3-2 Grunnpensjon</a>
+            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-1-paragraf-4')">§ 3-5 Trygdetid</a>
+            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-1')">§ 3-8 Tilleggspensjon</a>
+            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-5')">§ 3-12 Pensjonspoeng</a>
+            <a class="pension-link" onclick="navigateToPensionPara('kapittel-2-kapittel-1-kapittel-2-paragraf-8')">§ 3-15 Pensjonsgiv. inntekt</a>
+          </div></div>`;
+      }
 
       // Chapter 19 info
       if (cohort === 'kap19' || cohort === 'transition') {
