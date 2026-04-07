@@ -22,14 +22,16 @@ jobs:
         run: pip install beautifulsoup4
 
       - name: Last ned og oppdater data
-        run: python scripts/update_data.py
+        run: |
+          python scripts/update_data.py
+          python scripts/parse_rundskriv.py
 
       - name: Sjekk for endringer
         id: check
         run: |
-          if git diff --quiet folketrygdloven.json changelog.json 2>/dev/null; then
+          if git diff --quiet folketrygdloven.json rundskriv_kap20.json changelog.json 2>/dev/null; then
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "Ingen endringer i folketrygdloven."
+            echo "Ingen endringer."
           else
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "Endringer funnet!"
@@ -40,10 +42,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add folketrygdloven.json changelog.json
+          git add folketrygdloven.json rundskriv_kap20.json changelog.json
           git commit -m "Oppdater folketrygdloven data $(date +%Y-%m-%d)
 
-          Automatisk oppdatering fra Lovdata API.
+          Automatisk oppdatering fra Lovdata.
 
           Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
           git push
