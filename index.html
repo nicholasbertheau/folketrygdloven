@@ -456,6 +456,170 @@
 
     .theme-toggle:hover { background: rgba(255,255,255,0.25); }
 
+    /* Version selector */
+    .version-toggle {
+      position: absolute;
+      right: 4rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: white;
+      border-radius: 8px;
+      padding: 0.35rem 0.7rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+      line-height: 1;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .version-toggle:hover { background: rgba(255,255,255,0.25); }
+
+    .version-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 4rem 1rem 1rem;
+      z-index: 1000;
+    }
+    .version-modal-backdrop.open { display: flex; }
+    .version-modal {
+      background: var(--card-bg);
+      color: var(--text);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 520px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .version-modal header {
+      background: var(--primary);
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+    }
+    .version-modal header h3 {
+      color: white;
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .version-modal-close {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: white;
+      border-radius: 6px;
+      padding: 0.2rem 0.55rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .version-modal-body {
+      padding: 1rem 1.25rem;
+      overflow-y: auto;
+    }
+    .version-modal-body p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .version-date-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .version-date-row input[type="date"] {
+      flex: 1;
+      min-width: 160px;
+      padding: 0.5rem 0.6rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    .version-date-row button {
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .version-date-row button.secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .version-list { display: flex; flex-direction: column; gap: 0.35rem; }
+    .version-item {
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      background: var(--bg);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .version-item:hover { border-color: var(--accent); }
+    .version-item.active { border-color: var(--accent); background: rgba(49,130,206,0.08); font-weight: 600; }
+    .version-item .meta { color: var(--text-muted); font-size: 0.75rem; font-weight: 400; }
+    .version-loading, .version-error {
+      padding: 1rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .version-error { color: #c53030; }
+
+    /* Historic banner */
+    .historic-banner {
+      background: #fef3c7;
+      color: #78350f;
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      margin: 0.75rem 0 0;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.88rem;
+    }
+    [data-theme="dark"] .historic-banner {
+      background: #78350f;
+      color: #fef3c7;
+      border-color: #d97706;
+    }
+    .historic-banner.show { display: flex; }
+    .historic-banner button {
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    @media (max-width: 600px) {
+      .version-toggle { right: 3.5rem; padding: 0.3rem 0.5rem; font-size: 0.75rem; }
+      .version-toggle .v-label { display: none; }
+    }
+
     /* Back to top */
     .back-to-top {
       position: fixed;
@@ -1431,8 +1595,31 @@
 <body>
   <header>
     <h1>Ftrl.</h1>
+    <button class="version-toggle" onclick="openVersionPicker()" title="Velg versjon (historikk)">
+      <span>🕒</span><span class="v-label" id="versionLabel">Gjeldende</span>
+    </button>
     <button class="theme-toggle" onclick="toggleTheme()" title="Bytt tema">🌙</button>
   </header>
+
+  <div class="version-modal-backdrop" id="versionModal" onclick="if(event.target===this)closeVersionPicker()">
+    <div class="version-modal" role="dialog" aria-modal="true" aria-labelledby="versionModalTitle">
+      <header>
+        <h3 id="versionModalTitle">🕒 Velg versjon</h3>
+        <button class="version-modal-close" onclick="closeVersionPicker()" aria-label="Lukk">✕</button>
+      </header>
+      <div class="version-modal-body">
+        <p>Se hvordan folketrygdloven og rundskrivet så ut på et tidligere tidspunkt. Velg en dato eller klikk på en av snapshots fra GitHub.</p>
+        <div class="version-date-row">
+          <input type="date" id="versionDateInput" />
+          <button onclick="selectVersionByDate()">Gå til dato</button>
+          <button class="secondary" onclick="selectCurrentVersion()">Gjeldende</button>
+        </div>
+        <div id="versionListContainer">
+          <div class="version-loading">Laster historikk fra GitHub…</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="container">
     <nav class="sidebar" id="sidebar">
@@ -1462,6 +1649,10 @@
       </div>
 
       <div id="navTabs" class="nav-tabs"></div>
+      <div class="historic-banner" id="historicBanner">
+        <span id="historicBannerText"></span>
+        <button onclick="selectCurrentVersion()">Tilbake til gjeldende</button>
+      </div>
       <div id="toc"></div>
       <div id="results"></div>
     </div>
@@ -1514,14 +1705,186 @@
     let rundskrivData = null;
     let rundskrivByPara = {};
 
-    async function init() {
-      document.getElementById('results').innerHTML = '<div class="loading"><div class="spinner"></div><br>Laster folketrygdloven…</div>';
-      
+    // --- Versjonshåndtering ---
+    const REPO = 'nicholasbertheau/folketrygdloven';
+    const VERSIONED_FILES = ['folketrygdloven.json', 'rundskriv_kap20.json'];
+    const VERSIONS_CACHE_KEY = 'ftrl-versions-cache-v1';
+    const VERSIONS_CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 timer
+    let currentVersion = { sha: null, date: null }; // null = gjeldende
+    let versionsList = null; // [{sha, date, message}]
+
+    function dataUrl(filename, sha) {
+      if (!sha) return filename;
+      return `https://raw.githubusercontent.com/${REPO}/${sha}/${filename}`;
+    }
+
+    async function fetchVersionsList(force = false) {
+      if (!force) {
+        try {
+          const cached = JSON.parse(localStorage.getItem(VERSIONS_CACHE_KEY) || 'null');
+          if (cached && (Date.now() - cached.fetchedAt) < VERSIONS_CACHE_TTL_MS) {
+            versionsList = cached.versions;
+            return versionsList;
+          }
+        } catch(e) { /* ignore */ }
+      }
+
+      // Hent commits som har endret én av de versjonerte filene.
+      // GitHub API returnerer commits som rørte ved gitt path. Vi spør for hver fil.
+      const all = new Map();
+      for (const file of VERSIONED_FILES) {
+        const url = `https://api.github.com/repos/${REPO}/commits?path=${encodeURIComponent(file)}&per_page=100`;
+        const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
+        if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+        const commits = await res.json();
+        for (const c of commits) {
+          if (!all.has(c.sha)) {
+            all.set(c.sha, {
+              sha: c.sha,
+              date: (c.commit.author && c.commit.author.date) || c.commit.committer.date,
+              message: (c.commit.message || '').split('\n')[0],
+            });
+          }
+        }
+      }
+      versionsList = [...all.values()].sort((a, b) => b.date.localeCompare(a.date));
       try {
-        const res = await fetch('folketrygdloven.json');
-        lawData = await res.json();
-        
-        // Flatten paragraphs for search
+        localStorage.setItem(VERSIONS_CACHE_KEY, JSON.stringify({
+          fetchedAt: Date.now(),
+          versions: versionsList,
+        }));
+      } catch(e) { /* localStorage kan være full */ }
+      return versionsList;
+    }
+
+    function findVersionAtOrBefore(isoDate) {
+      if (!versionsList) return null;
+      // versionsList er sortert nyest først
+      const target = isoDate + 'T23:59:59Z';
+      for (const v of versionsList) {
+        if (v.date <= target) return v;
+      }
+      return null;
+    }
+
+    function openVersionPicker() {
+      const modal = document.getElementById('versionModal');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      // Initier datepicker
+      const di = document.getElementById('versionDateInput');
+      if (currentVersion.date) {
+        di.value = currentVersion.date.slice(0, 10);
+      } else if (!di.value) {
+        di.value = new Date().toISOString().slice(0, 10);
+      }
+      renderVersionList();
+    }
+
+    function closeVersionPicker() {
+      document.getElementById('versionModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    async function renderVersionList() {
+      const container = document.getElementById('versionListContainer');
+      container.innerHTML = '<div class="version-loading">Laster historikk fra GitHub…</div>';
+      try {
+        const list = await fetchVersionsList();
+        if (!list || list.length === 0) {
+          container.innerHTML = '<div class="version-loading">Ingen historiske versjoner funnet.</div>';
+          return;
+        }
+        let html = '<div class="version-list">';
+        for (const v of list.slice(0, 50)) {
+          const isActive = currentVersion.sha === v.sha;
+          const dateStr = new Date(v.date).toLocaleDateString('nb-NO', { year: 'numeric', month: 'short', day: '2-digit' });
+          const shortSha = v.sha.slice(0, 7);
+          html += `<div class="version-item ${isActive ? 'active' : ''}" onclick="selectVersion('${v.sha}', '${v.date}')">`;
+          html += `<span>${escHtml(dateStr)}</span>`;
+          html += `<span class="meta">${shortSha}</span>`;
+          html += `</div>`;
+        }
+        html += '</div>';
+        if (list.length > 50) {
+          html += `<p style="margin-top:0.75rem;font-size:0.78rem;color:var(--text-muted)">Viser de 50 nyeste av ${list.length} snapshots. Bruk dato-velgeren for eldre versjoner.</p>`;
+        }
+        container.innerHTML = html;
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="version-error">Kunne ikke hente historikk: ${escHtml(e.message)}</div>`;
+      }
+    }
+
+    async function selectVersionByDate() {
+      const di = document.getElementById('versionDateInput');
+      if (!di.value) return;
+      try {
+        await fetchVersionsList();
+      } catch (e) {
+        alert('Kunne ikke hente versjonsliste: ' + e.message);
+        return;
+      }
+      const v = findVersionAtOrBefore(di.value);
+      if (!v) {
+        alert('Fant ingen versjon på eller før ' + di.value + '. Eldste tilgjengelige er ' + (versionsList[versionsList.length - 1]?.date || 'ukjent'));
+        return;
+      }
+      selectVersion(v.sha, v.date);
+    }
+
+    async function selectVersion(sha, date) {
+      currentVersion = { sha, date };
+      try {
+        history.replaceState(null, '', '#v=' + sha);
+      } catch(e) {}
+      closeVersionPicker();
+      await reloadData();
+    }
+
+    async function selectCurrentVersion() {
+      currentVersion = { sha: null, date: null };
+      try {
+        if (location.hash.startsWith('#v=')) history.replaceState(null, '', location.pathname + location.search);
+      } catch(e) {}
+      closeVersionPicker();
+      await reloadData();
+    }
+
+    function updateVersionUI() {
+      const label = document.getElementById('versionLabel');
+      const banner = document.getElementById('historicBanner');
+      const bannerText = document.getElementById('historicBannerText');
+      if (currentVersion.sha) {
+        const d = new Date(currentVersion.date).toLocaleDateString('nb-NO', { year: 'numeric', month: 'long', day: 'numeric' });
+        label.textContent = d;
+        bannerText.innerHTML = `📅 Du ser på <strong>historisk versjon</strong> fra ${escHtml(d)} (commit <code>${currentVersion.sha.slice(0,7)}</code>).`;
+        banner.classList.add('show');
+      } else {
+        label.textContent = 'Gjeldende';
+        banner.classList.remove('show');
+      }
+    }
+
+    async function loadJsonForVersion(filename) {
+      const url = dataUrl(filename, currentVersion.sha);
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Kunne ikke laste ${filename} (${res.status})`);
+      return res.json();
+    }
+
+    async function reloadData() {
+      document.getElementById('results').innerHTML = '<div class="loading"><div class="spinner"></div><br>Laster' + (currentVersion.sha ? ' historisk versjon' : '') + '…</div>';
+      try {
+        // Reset state
+        lawData = null;
+        allParagraphs = [];
+        paraByRef = {};
+        rundskrivData = null;
+        rundskrivByPara = {};
+
+        lawData = await loadJsonForVersion('folketrygdloven.json');
+
         for (const part of lawData.parts) {
           for (const chapter of part.chapters) {
             for (const para of chapter.paragraphs) {
@@ -1535,7 +1898,6 @@
           }
         }
 
-        // Init Fuse.js
         fuse = new Fuse(allParagraphs, {
           keys: [
             { name: 'title', weight: 3 },
@@ -1547,42 +1909,58 @@
           minMatchCharLength: 2
         });
 
-        // Build lookup map from data-name (§X-Y) -> paragraph
         for (const para of allParagraphs) {
           const nameMatch = para.html.match(/data-name="([^"]+)"/);
           if (nameMatch) {
             paraByRef[nameMatch[1]] = para;
-            // Also store without spaces: §1-1 and § 1-1
             paraByRef[nameMatch[1].replace(/\s/g, '')] = para;
           }
         }
 
         document.getElementById('dataInfo').textContent = `${allParagraphs.length} paragrafer`;
-        document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('nb-NO');
+        const updatedDate = currentVersion.date
+          ? new Date(currentVersion.date).toLocaleDateString('nb-NO')
+          : new Date().toLocaleDateString('nb-NO');
+        document.getElementById('lastUpdated').textContent = updatedDate;
 
-        // Load changelog
+        // Changelog (laster alltid gjeldende, ikke versjonert)
         try {
           const cRes = await fetch('changelog.json');
           changelogData = await cRes.json();
         } catch(e) { console.warn('Kunne ikke laste endringslogg:', e); }
 
-        // Load rundskriv
+        // Rundskriv – versjonert
         try {
-          const rRes = await fetch('rundskriv_kap20.json');
-          rundskrivData = await rRes.json();
+          rundskrivData = await loadJsonForVersion('rundskriv_kap20.json');
           rundskrivByPara = {};
           for (const k of rundskrivData.paragrafKommentarer) {
             rundskrivByPara[k.paragrafNr] = k;
           }
         } catch(e) { console.warn('Kunne ikke laste rundskriv:', e); }
 
+        updateVersionUI();
         buildSidebar();
         buildNavTabs();
         showTOC();
       } catch (e) {
-        document.getElementById('results').innerHTML = '<div class="no-results"><div class="emoji">❌</div>Kunne ikke laste data. Sjekk at folketrygdloven.json finnes.</div>';
         console.error(e);
+        document.getElementById('results').innerHTML = `<div class="no-results"><div class="emoji">❌</div>Kunne ikke laste data: ${escHtml(e.message)}</div>`;
       }
+    }
+
+    async function init() {
+      // Sjekk om URL inneholder versjon (#v=<sha>)
+      const m = (location.hash || '').match(/^#v=([0-9a-f]{7,40})$/i);
+      if (m) {
+        currentVersion.sha = m[1];
+        // Hent dato fra commits-listen i bakgrunnen for å kunne vise i UI
+        try {
+          const list = await fetchVersionsList();
+          const v = list.find(x => x.sha.startsWith(currentVersion.sha) || currentVersion.sha.startsWith(x.sha));
+          if (v) { currentVersion.sha = v.sha; currentVersion.date = v.date; }
+        } catch(e) { /* fortsett uten dato */ }
+      }
+      await reloadData();
     }
 
     function buildNavTabs() {
