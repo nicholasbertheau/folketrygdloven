@@ -1,7 +1,10 @@
 {
   "title": "Rundskriv til ftrl. kapittel 20",
+  "kapittel": 20,
+  "navn": "Alderspensjon",
+  "kortnavn": "R20-00",
   "source": "https://lovdata.no/nav/rundskriv/r20-00",
-  "lastFetched": "2026-04-27",
+  "lastFetched": "2026-04-28",
   "generellDel": {
     "title": "Kapittel 20 – Generell del",
     "sections": [

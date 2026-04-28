@@ -29,7 +29,7 @@ jobs:
       - name: Sjekk for endringer
         id: check
         run: |
-          if git diff --quiet folketrygdloven.json rundskriv_kap20.json changelog.json 2>/dev/null; then
+          if git diff --quiet folketrygdloven.json rundskriv_kap20.json rundskriv_kap12.json changelog.json 2>/dev/null; then
             echo "changed=false" >> $GITHUB_OUTPUT
             echo "Ingen endringer."
           else
@@ -42,7 +42,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add folketrygdloven.json rundskriv_kap20.json changelog.json
+          git add folketrygdloven.json rundskriv_kap20.json rundskriv_kap12.json changelog.json
           git commit -m "Oppdater folketrygdloven data $(date +%Y-%m-%d)
 
           Automatisk oppdatering fra Lovdata.

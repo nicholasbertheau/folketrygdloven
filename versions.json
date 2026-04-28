@@ -2,7 +2,8 @@
   "repo": "nicholasbertheau/folketrygdloven",
   "files": [
     "folketrygdloven.json",
-    "rundskriv_kap20.json"
+    "rundskriv_kap20.json",
+    "rundskriv_kap12.json"
   ],
   "count": 7,
   "versions": [

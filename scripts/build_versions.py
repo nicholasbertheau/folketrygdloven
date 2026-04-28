@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 
-VERSIONED_FILES = ["folketrygdloven.json", "rundskriv_kap20.json"]
+VERSIONED_FILES = ["folketrygdloven.json", "rundskriv_kap20.json", "rundskriv_kap12.json"]
 OUTPUT_FILE = "versions.json"
 MAX_ENTRIES = 500
 
