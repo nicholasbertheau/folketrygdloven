@@ -1729,32 +1729,68 @@
         } catch(e) { /* ignore */ }
       }
 
-      // Hent commits som har endret én av de versjonerte filene.
-      // GitHub API returnerer commits som rørte ved gitt path. Vi spør for hver fil.
-      const all = new Map();
-      for (const file of VERSIONED_FILES) {
-        const url = `https://api.github.com/repos/${REPO}/commits?path=${encodeURIComponent(file)}&per_page=100`;
-        const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
-        if (!res.ok) throw new Error(`GitHub API ${res.status}`);
-        const commits = await res.json();
-        for (const c of commits) {
-          if (!all.has(c.sha)) {
-            all.set(c.sha, {
-              sha: c.sha,
-              date: (c.commit.author && c.commit.author.date) || c.commit.committer.date,
-              message: (c.commit.message || '').split('\n')[0],
-            });
+      // Primær kilde: lokal versions.json (genereres av workflowen, ingen rate-limit).
+      try {
+        const res = await fetch('versions.json', { cache: 'no-cache' });
+        if (res.ok) {
+          const payload = await res.json();
+          if (payload && Array.isArray(payload.versions) && payload.versions.length) {
+            versionsList = payload.versions
+              .map(v => ({ sha: v.sha, date: v.date, message: v.message }))
+              .sort((a, b) => b.date.localeCompare(a.date));
+            cacheVersions(versionsList);
+            return versionsList;
           }
         }
+      } catch(e) { /* faller tilbake til API */ }
+
+      // Fallback: GitHub commits-API (kan rate-limites).
+      try {
+        const all = new Map();
+        for (const file of VERSIONED_FILES) {
+          const url = `https://api.github.com/repos/${REPO}/commits?path=${encodeURIComponent(file)}&per_page=100`;
+          const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
+          if (!res.ok) {
+            const body = await res.text().catch(() => '');
+            const isRate = res.status === 403 && /rate limit/i.test(body);
+            throw new Error(isRate
+              ? `GitHubs API har nådd grensen for uautentiserte forespørsler. Prøv igjen om en stund.`
+              : `GitHub API ${res.status}`);
+          }
+          const commits = await res.json();
+          for (const c of commits) {
+            if (!all.has(c.sha)) {
+              all.set(c.sha, {
+                sha: c.sha,
+                date: (c.commit.author && c.commit.author.date) || c.commit.committer.date,
+                message: (c.commit.message || '').split('\n')[0],
+              });
+            }
+          }
+        }
+        versionsList = [...all.values()].sort((a, b) => b.date.localeCompare(a.date));
+        cacheVersions(versionsList);
+        return versionsList;
+      } catch (apiErr) {
+        // Bruk utdatert cache hvis vi har noe – bedre enn ingenting.
+        try {
+          const stale = JSON.parse(localStorage.getItem(VERSIONS_CACHE_KEY) || 'null');
+          if (stale && Array.isArray(stale.versions) && stale.versions.length) {
+            versionsList = stale.versions;
+            return versionsList;
+          }
+        } catch(e) { /* ignore */ }
+        throw apiErr;
       }
-      versionsList = [...all.values()].sort((a, b) => b.date.localeCompare(a.date));
+    }
+
+    function cacheVersions(list) {
       try {
         localStorage.setItem(VERSIONS_CACHE_KEY, JSON.stringify({
           fetchedAt: Date.now(),
-          versions: versionsList,
+          versions: list,
         }));
       } catch(e) { /* localStorage kan være full */ }
-      return versionsList;
     }
 
     function findVersionAtOrBefore(isoDate) {

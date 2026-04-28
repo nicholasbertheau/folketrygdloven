@@ -49,3 +49,20 @@ jobs:
 
           Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
           git push
+
+      - name: Bygg versjonsmanifest
+        if: steps.check.outputs.changed == 'true'
+        run: python scripts/build_versions.py
+
+      - name: Commit versjonsmanifest
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          if ! git diff --quiet versions.json 2>/dev/null; then
+            git add versions.json
+            git commit -m "Oppdater versjonsmanifest $(date +%Y-%m-%d)
+
+            Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+            git push
+          else
+            echo "Ingen endring i versions.json"
+          fi
