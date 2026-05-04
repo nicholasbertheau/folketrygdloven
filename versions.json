@@ -5,62 +5,25 @@
     "rundskriv_kap20.json",
     "rundskriv_kap12.json"
   ],
-  "count": 7,
+  "count": 2,
   "versions": [
     {
-      "sha": "3d8dc23e7911f456df844fb6616c5790d6de77d8",
-      "date": "2026-04-27T08:12:03Z",
-      "message": "Oppdater folketrygdloven data 2026-04-27",
+      "sha": "be17c48508591ef3d29c594c6a1d087b8232f321",
+      "date": "2026-05-04T08:22:34Z",
+      "message": "Oppdater folketrygdloven data 2026-05-04",
       "files": [
-        "rundskriv_kap20.json"
+        "rundskriv_kap20.json",
+        "rundskriv_kap12.json"
       ]
     },
     {
-      "sha": "a74191f8e3f21acb06a396a277bebd7c1590a693",
-      "date": "2026-04-20T07:57:22Z",
-      "message": "Oppdater folketrygdloven data 2026-04-20",
+      "sha": "13e15af283ec1636a83b2c1313d8295d63668cc2",
+      "date": "2026-04-28T11:41:20+02:00",
+      "message": "Legg til rundskriv for kapittel 12 (uføretrygd)",
       "files": [
-        "rundskriv_kap20.json"
-      ]
-    },
-    {
-      "sha": "a4da5d8e06e4a8dad716ff53d4b9fc0f2566d3e4",
-      "date": "2026-04-13T07:53:57Z",
-      "message": "Oppdater folketrygdloven data 2026-04-13",
-      "files": [
-        "rundskriv_kap20.json"
-      ]
-    },
-    {
-      "sha": "507baf7206102062559342507ab8e34a6250440a",
-      "date": "2026-04-07T12:35:05+02:00",
-      "message": "Legg til rundskriv for kapittel 20",
-      "files": [
-        "rundskriv_kap20.json"
-      ]
-    },
-    {
-      "sha": "c16c3534d5291c8f9ecba4b193f724b4ceb622f5",
-      "date": "2026-03-20T13:07:43+01:00",
-      "message": "Fiks parser: legg til 117 manglende paragrafer + kap 3 i pensjonsguide",
-      "files": [
-        "folketrygdloven.json"
-      ]
-    },
-    {
-      "sha": "959ed077b68b587695b19437952aa425d3ac17c3",
-      "date": "2026-03-19T20:37:47+01:00",
-      "message": "Legg til forskrifter og endringslogg",
-      "files": [
-        "folketrygdloven.json"
-      ]
-    },
-    {
-      "sha": "0f0f8e013a53d66e39c894b2b616172dddd7ff46",
-      "date": "2026-03-19T20:31:56+01:00",
-      "message": "Legg til mørkt tema, permalenker, tilbake-knapp og endringshistorikk-toggle",
-      "files": [
-        "folketrygdloven.json"
+        "folketrygdloven.json",
+        "rundskriv_kap20.json",
+        "rundskriv_kap12.json"
       ]
     }
   ]
