@@ -8,18 +8,18 @@
   "count": 2,
   "versions": [
     {
-      "sha": "be17c48508591ef3d29c594c6a1d087b8232f321",
-      "date": "2026-05-04T08:22:34Z",
-      "message": "Oppdater folketrygdloven data 2026-05-04",
+      "sha": "f19e62a56d46eef254c04026f3a9bd1d29143028",
+      "date": "2026-05-11T09:29:45Z",
+      "message": "Oppdater folketrygdloven data 2026-05-11",
       "files": [
         "rundskriv_kap20.json",
         "rundskriv_kap12.json"
       ]
     },
     {
-      "sha": "13e15af283ec1636a83b2c1313d8295d63668cc2",
-      "date": "2026-04-28T11:41:20+02:00",
-      "message": "Legg til rundskriv for kapittel 12 (uføretrygd)",
+      "sha": "84e6f0658a5506fc6ff9ea0f6286352e0b0303a9",
+      "date": "2026-05-04T08:22:35Z",
+      "message": "Oppdater versjonsmanifest 2026-05-04",
       "files": [
         "folketrygdloven.json",
         "rundskriv_kap20.json",
