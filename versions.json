@@ -8,18 +8,18 @@
   "count": 2,
   "versions": [
     {
-      "sha": "03e447d6caa0864a2187a76efc64524e1e86f995",
-      "date": "2026-09-07T11:18:07Z",
-      "message": "Oppdater folketrygdloven data 2026-09-07",
+      "sha": "ad3c5d8a4b48f18893f61dc98a5b01cab239f01f",
+      "date": "2026-09-14T11:28:15Z",
+      "message": "Oppdater folketrygdloven data 2026-09-14",
       "files": [
         "rundskriv_kap20.json",
         "rundskriv_kap12.json"
       ]
     },
     {
-      "sha": "fb429f724577051e3540d301e4b0357328a9e3b1",
-      "date": "2026-08-31T12:24:12Z",
-      "message": "Oppdater versjonsmanifest 2026-08-31",
+      "sha": "47e4e97ac3ac24c5370a71a03e1dc5d4b9ca6b36",
+      "date": "2026-09-07T11:18:09Z",
+      "message": "Oppdater versjonsmanifest 2026-09-07",
       "files": [
         "folketrygdloven.json",
         "rundskriv_kap20.json",
